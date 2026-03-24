@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+npx vp staged
+npx knip --cache --no-progress
