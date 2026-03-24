@@ -1,32 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gambreng - Gacha Theme Selector</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div id="canvas-container"></div>
 
     <div id="ui-overlay">
-        <div id="title"><img src="assets/gambreng-logo.png" alt="GAMBRENG" id="title-logo" onerror="this.style.display='none';this.parentElement.textContent='GAMBRENG';"></div>
-        <div id="participant-themes" class="hidden"></div>
-        <button id="start-btn">MASUKKAN KAPSUL</button>
-        <button id="handle-btn" class="hidden">PUTAR!</button>
-        <button id="reset-btn" class="hidden">ULANGI</button>
+      <div id="title">
+        <img
+          src="/assets/gambreng-logo.png"
+          alt="GAMBRENG"
+          id="title-logo"
+          onerror="
+            this.style.display = 'none';
+            this.parentElement.textContent = 'GAMBRENG';
+          "
+        />
+      </div>
+      <div id="participant-themes" class="hidden"></div>
+      <button id="edit-btn">EDIT PESERTA</button>
+      <button id="start-btn">MASUKKAN KAPSUL</button>
+      <button id="handle-btn" class="hidden">PUTAR!</button>
+      <button id="reset-btn" class="hidden">ULANGI</button>
+    </div>
+
+    <div id="editor-overlay" class="hidden">
+      <form id="editor-form">
+        <h2>Edit Peserta</h2>
+        <div class="editor-rows"></div>
+        <div class="editor-actions">
+          <button type="button" id="save-editor-btn">SIMPAN</button>
+          <button type="button" id="cancel-editor-btn">BATAL</button>
+          <button type="button" id="copy-link-btn">SALIN LINK</button>
+        </div>
+      </form>
     </div>
 
     <div id="result-overlay" class="hidden">
-        <div id="result-content">
-            <h2>TEMA TERPILIH:</h2>
-            <h1 id="winner-theme"></h1>
-            <p id="winner-participant"></p>
-        </div>
+      <div id="result-content">
+        <h2>TEMA TERPILIH:</h2>
+        <h1 id="winner-theme"></h1>
+        <p id="winner-participant"></p>
+      </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="app.js"></script>
-</body>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
