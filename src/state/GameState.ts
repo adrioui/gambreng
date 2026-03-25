@@ -2,11 +2,12 @@ import { EventEmitter } from "@/utils/EventEmitter";
 import { GameStateType } from "@/types";
 
 const VALID_TRANSITIONS: Record<GameStateType, GameStateType[]> = {
-  [GameStateType.Idle]: [GameStateType.Entering],
-  [GameStateType.Entering]: [GameStateType.Ready],
-  [GameStateType.Ready]: [GameStateType.Spinning],
-  [GameStateType.Spinning]: [GameStateType.Revealing],
-  [GameStateType.Revealing]: [GameStateType.Done],
+  [GameStateType.Idle]: [GameStateType.Triggered],
+  [GameStateType.Triggered]: [GameStateType.BuildingUp],
+  [GameStateType.BuildingUp]: [GameStateType.Capturing],
+  [GameStateType.Capturing]: [GameStateType.Dispensing],
+  [GameStateType.Dispensing]: [GameStateType.Hatching],
+  [GameStateType.Hatching]: [GameStateType.Done],
   [GameStateType.Done]: [GameStateType.Idle],
 };
 

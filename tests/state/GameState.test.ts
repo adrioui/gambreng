@@ -12,10 +12,11 @@ describe("GameState", () => {
   it("allows valid transitions in sequence", () => {
     const gameState = new GameState();
 
-    expect(gameState.transition(GameStateType.Entering)).toBe(true);
-    expect(gameState.transition(GameStateType.Ready)).toBe(true);
-    expect(gameState.transition(GameStateType.Spinning)).toBe(true);
-    expect(gameState.transition(GameStateType.Revealing)).toBe(true);
+    expect(gameState.transition(GameStateType.Triggered)).toBe(true);
+    expect(gameState.transition(GameStateType.BuildingUp)).toBe(true);
+    expect(gameState.transition(GameStateType.Capturing)).toBe(true);
+    expect(gameState.transition(GameStateType.Dispensing)).toBe(true);
+    expect(gameState.transition(GameStateType.Hatching)).toBe(true);
     expect(gameState.transition(GameStateType.Done)).toBe(true);
     expect(gameState.transition(GameStateType.Idle)).toBe(true);
     expect(gameState.current).toBe(GameStateType.Idle);
@@ -25,7 +26,7 @@ describe("GameState", () => {
     const gameState = new GameState();
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    expect(gameState.transition(GameStateType.Spinning)).toBe(false);
+    expect(gameState.transition(GameStateType.Capturing)).toBe(false);
     expect(gameState.current).toBe(GameStateType.Idle);
     expect(warn).toHaveBeenCalledOnce();
 
@@ -37,11 +38,11 @@ describe("GameState", () => {
     const handler = vi.fn();
     gameState.on("change", handler);
 
-    gameState.transition(GameStateType.Entering);
+    gameState.transition(GameStateType.Triggered);
 
     expect(handler).toHaveBeenCalledWith({
       from: GameStateType.Idle,
-      to: GameStateType.Entering,
+      to: GameStateType.Triggered,
     });
   });
 
@@ -49,13 +50,13 @@ describe("GameState", () => {
     const gameState = new GameState();
     const handler = vi.fn();
     gameState.on("change", handler);
-    gameState.transition(GameStateType.Entering);
+    gameState.transition(GameStateType.Triggered);
 
     handler.mockClear();
     gameState.reset();
 
     expect(handler).toHaveBeenCalledWith({
-      from: GameStateType.Entering,
+      from: GameStateType.Triggered,
       to: GameStateType.Idle,
     });
   });

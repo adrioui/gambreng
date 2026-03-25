@@ -2,7 +2,12 @@ import * as THREE from "three";
 import { MACHINE_COLORS } from "@/config";
 import { createTrimMaterial } from "@/objects/machine/materials";
 
-export function createDome(group: THREE.Group): THREE.Mesh {
+interface DomeResult {
+  mesh: THREE.Mesh;
+  light: THREE.PointLight;
+}
+
+export function createDome(group: THREE.Group): DomeResult {
   // Glass sphere
   const domeGeo = new THREE.SphereGeometry(1.5, 48, 32, 0, Math.PI * 2, 0, Math.PI * 0.55);
   const domeMat = new THREE.MeshPhysicalMaterial({
@@ -27,5 +32,10 @@ export function createDome(group: THREE.Group): THREE.Mesh {
   domeBorder.position.y = 3.6;
   group.add(domeBorder);
 
-  return dome;
+  // Interior light (starts off)
+  const domeLight = new THREE.PointLight(0xfaab36, 0, 5);
+  domeLight.position.set(0, 4.2, 0);
+  group.add(domeLight);
+
+  return { mesh: dome, light: domeLight };
 }

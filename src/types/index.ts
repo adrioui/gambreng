@@ -6,10 +6,11 @@ export interface Participant {
 
 export enum GameStateType {
   Idle = "idle",
-  Entering = "entering",
-  Ready = "ready",
-  Spinning = "spinning",
-  Revealing = "revealing",
+  Triggered = "triggered",
+  BuildingUp = "buildingUp",
+  Capturing = "capturing",
+  Dispensing = "dispensing",
+  Hatching = "hatching",
   Done = "done",
 }
 

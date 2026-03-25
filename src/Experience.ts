@@ -4,7 +4,8 @@ import { Sizes } from "@/core/Sizes";
 import { Renderer } from "@/core/Renderer";
 import { Loop } from "@/core/Loop";
 import { Machine } from "@/objects/Machine";
-import { Capsule } from "@/objects/Capsule";
+import { CaptureBall } from "@/objects/CaptureBall";
+import { OrbitSystem } from "@/objects/OrbitSystem";
 import { Environment } from "@/objects/Environment";
 import { FloatingStars } from "@/objects/FloatingStars";
 import { GameState } from "@/state/GameState";
@@ -12,11 +13,16 @@ import { UIManager } from "@/ui/UIManager";
 import { encodeParticipantsToURL } from "@/config";
 import { GameStateType } from "@/types";
 import type { Participant, LoopCallback } from "@/types";
-import { playEntryAnimation } from "@/animations/EntryAnimation";
-import { playSpinAnimation } from "@/animations/SpinAnimation";
-import { playRevealAnimation } from "@/animations/RevealAnimation";
-import { createSparkles } from "@/effects/SparkleEffect";
+import { playTriggerAnimation } from "@/animations/TriggerAnimation";
+import { playBuildUpAnimation } from "@/animations/BuildUpAnimation";
+import { playCaptureAnimation } from "@/animations/CaptureAnimation";
+import { playDispenseAnimation } from "@/animations/DispenseAnimation";
+import { playHatchAnimation } from "@/animations/HatchAnimation";
 import { createConfetti } from "@/effects/ConfettiEffect";
+import { createSparkles } from "@/effects/SparkleEffect";
+import { INTERACTIVE_LAYER } from "@/objects/machine/Handle";
+
+const DEFAULT_CAMERA_TARGET = new THREE.Vector3(0, 2.5, 0);
 
 export class Experience implements LoopCallback {
   canvas!: HTMLCanvasElement;
@@ -26,132 +32,178 @@ export class Experience implements LoopCallback {
   renderer!: Renderer;
   loop!: Loop;
   machine!: Machine;
-  capsules!: Capsule[];
+  balls!: CaptureBall[];
+  orbitSystem!: OrbitSystem;
   floatingStars!: FloatingStars;
   gameState!: GameState;
   ui!: UIManager;
   participants!: Participant[];
-  winnerIndex: number = -1;
-  private spinTimeout: ReturnType<typeof setTimeout> | null = null;
+  winnerIndex = -1;
+  private raycaster!: THREE.Raycaster;
+  private mouse!: THREE.Vector2;
+  private handleBall!: THREE.Object3D;
+  private handleHovered = false;
+  private cameraTarget = DEFAULT_CAMERA_TARGET.clone();
 
   constructor(canvas: HTMLCanvasElement, participants: Participant[]) {
     this.canvas = canvas;
     this.participants = participants;
 
-    // Core
     this.sizes = new Sizes();
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(40, this.sizes.width / this.sizes.height, 0.1, 100);
     this.camera.position.set(0, 3.0, 12);
-    this.camera.lookAt(0, 2.5, 0);
+    this.camera.lookAt(DEFAULT_CAMERA_TARGET);
     this.renderer = new Renderer(canvas, this.sizes);
     this.loop = new Loop();
 
-    // Resize handler
     this.sizes.on("resize", () => {
       this.camera.aspect = this.sizes.width / this.sizes.height;
       this.camera.updateProjectionMatrix();
     });
 
-    // Objects
     new Environment(this.scene);
     this.machine = new Machine(this.scene);
-    this.capsules = participants.map((p, i) => {
-      const c = new Capsule(p, i);
-      c.addToScene(this.scene);
-      return c;
+    this.balls = participants.map((participant, index) => {
+      const ball = new CaptureBall(participant, index);
+      ball.addToScene(this.scene);
+      return ball;
     });
+    this.orbitSystem = new OrbitSystem(this.balls, this.scene);
     this.floatingStars = new FloatingStars(this.scene);
+    this.handleBall = this.machine.handle.children[2] ?? this.machine.handle;
 
-    // State & UI
     this.gameState = new GameState();
     this.ui = new UIManager();
     this.ui.bindEvents({
-      start: () => this.startEntry(),
-      spin: () => this.spinGacha(),
+      start: () => this.triggerGacha(),
       reset: () => this.resetGame(),
       edit: () => this.openEditor(),
       saveParticipants: (nextParticipants) => this.applyParticipantEdits(nextParticipants),
     });
     this.ui.setEditEnabled(true);
 
-    // Loop
     this.loop.add(this);
     this.loop.add(this.floatingStars);
     this.loop.start();
 
-    // Intro camera animation
     gsap.from(this.camera.position, { y: 6, z: 14, duration: 2.5, ease: "power3.out" });
+
+    this.raycaster = new THREE.Raycaster();
+    this.raycaster.layers.set(INTERACTIVE_LAYER);
+    this.mouse = new THREE.Vector2();
+
+    canvas.addEventListener("click", (event) => {
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const hits = this.raycaster.intersectObjects(this.machine.handle.children, true);
+      if (hits.length > 0 && this.gameState.is(GameStateType.Idle)) {
+        this.setHandleHover(false);
+        this.triggerGacha();
+      }
+    });
+
+    canvas.addEventListener("mousemove", (event) => {
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const hits = this.raycaster.intersectObjects(this.machine.handle.children, true);
+      const hovered = hits.length > 0 && this.gameState.is(GameStateType.Idle);
+      if (hovered !== this.handleHovered) {
+        this.setHandleHover(hovered);
+      }
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+      this.setHandleHover(false);
+    });
   }
 
-  update(_delta: number, elapsed: number): void {
+  update(delta: number, elapsed: number): void {
     if (this.gameState.is(GameStateType.Idle)) {
       this.machine.group.position.y = Math.sin(elapsed * 0.7) * 0.04;
       this.machine.group.rotation.y = Math.sin(elapsed * 0.3) * 0.03;
-      this.capsules.forEach((c, i) => {
-        const a = elapsed * 0.4 + i * Math.PI * 0.5;
-        c.group.position.x = Math.cos(a) * 2.0;
-        c.group.position.z = Math.sin(a) * 2.0;
-        c.group.position.y = 5.2 + Math.sin(elapsed * 1.2 + i) * 0.2;
-        c.group.rotation.y += 0.015;
-        c.group.rotation.x = Math.sin(elapsed * 0.8 + i) * 0.2;
-      });
-    } else if (this.gameState.is(GameStateType.Ready)) {
+      this.orbitSystem.update(delta, elapsed);
+    } else if (
+      this.gameState.is(GameStateType.BuildingUp) ||
+      this.gameState.is(GameStateType.Capturing)
+    ) {
       this.machine.group.position.y = Math.sin(elapsed * 0.7) * 0.02;
-      this.capsules.forEach((c, i) => {
-        c.group.position.y = 3.8 + Math.sin(elapsed * 1.8 + i * 1.3) * 0.08;
-        c.group.rotation.x += 0.003;
-        c.group.rotation.y += 0.005;
-      });
-    } else if (this.gameState.is(GameStateType.Done) && this.winnerIndex >= 0) {
-      const w = this.capsules[this.winnerIndex];
-      w.group.position.y = 2.5 + Math.sin(elapsed * 1.2) * 0.08;
-      w.group.rotation.y += 0.008;
+      this.orbitSystem.update(delta, elapsed);
+      this.orbitSystem.updateTrail();
+    }
+
+    if (this.gameState.is(GameStateType.Idle) || this.gameState.is(GameStateType.Done)) {
+      this.cameraTarget.lerp(DEFAULT_CAMERA_TARGET, Math.min(1, delta * 5));
+      this.camera.lookAt(this.cameraTarget);
     }
 
     this.renderer.render(this.scene, this.camera);
   }
 
-  private startEntry(): void {
+  private triggerGacha(): void {
     if (!this.gameState.is(GameStateType.Idle)) return;
-    this.gameState.transition(GameStateType.Entering);
 
+    this.setHandleHover(false);
+    this.gameState.transition(GameStateType.Triggered);
     this.ui.setEditEnabled(false);
     this.ui.hideTitle();
     this.ui.showParticipantThemes(this.participants);
 
-    playEntryAnimation(this.capsules, this.camera, () => {
-      this.ui.hideParticipantThemes();
-      this.ui.showHandleButton();
-      this.gameState.transition(GameStateType.Ready);
+    playTriggerAnimation(this.machine.handle, this.camera, () => {
+      this.machine.handle.rotation.x = 0;
+      this.gameState.transition(GameStateType.BuildingUp);
+      this.buildUp();
     });
   }
 
-  private spinGacha(): void {
-    if (!this.gameState.is(GameStateType.Ready)) return;
-    this.gameState.transition(GameStateType.Spinning);
-    this.ui.disableHandleButton();
-    this.ui.fadeOutParticipantThemes();
-
-    const { timeout } = playSpinAnimation(
+  private buildUp(): void {
+    playBuildUpAnimation(
+      this.orbitSystem,
+      this.machine.domeLight,
+      this.camera,
       this.machine.group,
-      this.machine.handle,
-      this.capsules,
-      (winnerIndex) => {
-        this.spinTimeout = null;
-        this.winnerIndex = winnerIndex;
-        this.gameState.transition(GameStateType.Revealing);
-        this.revealWinner();
+      () => {
+        this.gameState.transition(GameStateType.Capturing);
+        this.capture();
       },
     );
-    this.spinTimeout = timeout;
   }
 
-  private revealWinner(): void {
-    playRevealAnimation(
-      this.capsules,
-      this.winnerIndex,
+  private capture(): void {
+    this.ui.fadeOutParticipantThemes();
+
+    playCaptureAnimation(
+      this.balls,
+      this.orbitSystem,
+      this.machine.domeLight,
       this.camera,
+      (winnerIndex) => {
+        this.winnerIndex = winnerIndex;
+        this.gameState.transition(GameStateType.Dispensing);
+        this.dispense();
+      },
+    );
+  }
+
+  private dispense(): void {
+    const winner = this.balls[this.winnerIndex];
+    const nestPosition = this.machine.nestTray.position.clone();
+
+    playDispenseAnimation(winner, nestPosition, this.camera, this.machine.domeLight, () => {
+      this.gameState.transition(GameStateType.Hatching);
+      this.hatchBall();
+    });
+  }
+
+  private hatchBall(): void {
+    const winner = this.balls[this.winnerIndex];
+
+    playHatchAnimation(
+      winner,
+      this.camera,
+      this.scene,
       (position) => createSparkles(this.scene, position),
       () => {
         this.gameState.transition(GameStateType.Done);
@@ -175,48 +227,73 @@ export class Experience implements LoopCallback {
   private resetGame(): void {
     this.killAllAnimations();
 
-    this.ui.hideResult();
+    this.ui.hideResult(true);
     this.ui.resetAll();
     this.ui.setEditEnabled(true);
+    this.setHandleHover(false);
+    this.cameraTarget.copy(DEFAULT_CAMERA_TARGET);
 
     gsap.to(this.camera.position, { x: 0, y: 3.0, z: 12, duration: 1, ease: "power2.out" });
     gsap.to(this.machine.group.position, { x: 0, y: 0, z: 0, duration: 0.5 });
     gsap.to(this.machine.group.rotation, { x: 0, y: 0, z: 0, duration: 0.5 });
     this.machine.handle.rotation.x = 0;
+    this.machine.domeLight.intensity = 0;
 
-    this.capsules.forEach((c, i) => {
-      gsap.to(c.group.position, {
-        x: -2 + i * 1.3,
-        y: 5.2,
-        z: 0,
-        duration: 0.8,
-        ease: "power2.out",
-      });
-      gsap.to(c.group.rotation, { x: 0, y: 0, z: 0, duration: 0.8 });
-      gsap.to(c.group.scale, { x: 1, y: 1, z: 1, duration: 0.5 });
+    this.balls.forEach((ball) => {
+      ball.reset();
     });
+    this.orbitSystem.reattach();
 
     this.winnerIndex = -1;
     this.gameState.reset();
   }
 
   private killAllAnimations(): void {
-    this.capsules.forEach((c) => {
-      gsap.killTweensOf(c.group.position);
-      gsap.killTweensOf(c.group.rotation);
-      gsap.killTweensOf(c.group.scale);
+    this.balls.forEach((ball) => {
+      gsap.killTweensOf(ball.group.position);
+      gsap.killTweensOf(ball.group.rotation);
+      gsap.killTweensOf(ball.group.scale);
+      gsap.killTweensOf(ball.topPivot.position);
+      gsap.killTweensOf(ball.topPivot.rotation);
+      gsap.killTweensOf(ball.topPivot.scale);
+      gsap.killTweensOf(ball.bottomShell.position);
+      gsap.killTweensOf(ball.bottomShell.rotation);
+      gsap.killTweensOf(ball.bottomShell.scale);
+      gsap.killTweensOf(ball.seamRing.scale);
+      gsap.killTweensOf(ball.buttonFront.position);
+      gsap.killTweensOf(ball.buttonFront.scale);
+      gsap.killTweensOf(ball.buttonBack.position);
+      gsap.killTweensOf(ball.buttonBack.scale);
+      gsap.killTweensOf(ball.innerGlow.scale);
+      gsap.killTweensOf(ball.innerGlowMaterial);
+      gsap.killTweensOf(ball.seamMaterial);
+      gsap.killTweensOf(ball.buttonCoreMaterial);
+      gsap.killTweensOf(ball.topMaterial);
     });
     gsap.killTweensOf(this.machine.group.position);
     gsap.killTweensOf(this.machine.group.rotation);
     gsap.killTweensOf(this.machine.handle.rotation);
+    gsap.killTweensOf(this.handleBall.scale);
+    gsap.killTweensOf(this.machine.domeLight);
+    gsap.killTweensOf(this.orbitSystem);
     gsap.killTweensOf(this.camera.position);
-    if (this.spinTimeout) {
-      clearTimeout(this.spinTimeout);
-      this.spinTimeout = null;
-    }
+  }
+
+  private setHandleHover(hovered: boolean): void {
+    this.handleHovered = hovered;
+    this.canvas.style.cursor = hovered ? "pointer" : "default";
+    gsap.to(this.handleBall.scale, {
+      x: hovered ? 1.2 : 1,
+      y: hovered ? 1.2 : 1,
+      z: hovered ? 1.2 : 1,
+      duration: 0.2,
+      overwrite: true,
+    });
   }
 
   destroy(): void {
+    this.setHandleHover(false);
+    this.orbitSystem.dispose();
     this.loop.dispose();
     this.sizes.dispose();
     this.renderer.dispose();

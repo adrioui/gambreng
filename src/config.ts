@@ -7,7 +7,7 @@ export const DEFAULT_PARTICIPANTS: Participant[] = [
   { name: "Peserta 4", theme: "Steampunk", color: 0x005f60 },
 ];
 
-export const PALETTE = {
+const PALETTE = {
   orange: { dark: 0xfd5901, mid: 0xf78104, gold: 0xfaab36 },
   teal: { bright: 0x249ea0, mid: 0x008083, dark: 0x005f60, veryDark: 0x003d3d },
   metal: { dark: 0x374151 },
@@ -23,7 +23,7 @@ export const MACHINE_COLORS = {
   trim: PALETTE.orange.dark,
   dome: 0xaaddff,
   cap: PALETTE.orange.gold,
-  coinSlot: PALETTE.teal.dark,
+
   chute: PALETTE.teal.mid,
   handleStem: PALETTE.metal.dark,
   handleBall: PALETTE.orange.dark,
