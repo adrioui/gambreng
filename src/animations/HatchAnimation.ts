@@ -276,11 +276,11 @@ export function playHatchAnimation(
     camera.position,
     {
       x: 0,
-      y: 3.0,
-      z: 10,
+      y: 3.1,
+      z: 10.15,
       duration: 1.0,
       ease: "sine.out",
-      onUpdate: () => camera.lookAt(0, 2.5, 0),
+      onUpdate: () => camera.lookAt(0, 2.65, 0),
     },
     ">0.2",
   );

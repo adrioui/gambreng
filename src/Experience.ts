@@ -22,7 +22,7 @@ import { createConfetti } from "@/effects/ConfettiEffect";
 import { createSparkles } from "@/effects/SparkleEffect";
 import { INTERACTIVE_LAYER } from "@/objects/machine/Handle";
 
-const DEFAULT_CAMERA_TARGET = new THREE.Vector3(0, 2.5, 0);
+const DEFAULT_CAMERA_TARGET = new THREE.Vector3(0, 2.65, 0);
 
 export class Experience implements LoopCallback {
   canvas!: HTMLCanvasElement;
@@ -52,7 +52,7 @@ export class Experience implements LoopCallback {
     this.sizes = new Sizes();
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(40, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.camera.position.set(0, 3.0, 12);
+    this.camera.position.set(0, 3.1, 12.15);
     this.camera.lookAt(DEFAULT_CAMERA_TARGET);
     this.renderer = new Renderer(canvas, this.sizes);
     this.loop = new Loop();
@@ -87,7 +87,7 @@ export class Experience implements LoopCallback {
     this.loop.add(this.floatingStars);
     this.loop.start();
 
-    gsap.from(this.camera.position, { y: 6, z: 14, duration: 2.5, ease: "power3.out" });
+    gsap.from(this.camera.position, { y: 5.9, z: 14.1, duration: 2.5, ease: "power3.out" });
 
     this.raycaster = new THREE.Raycaster();
     this.raycaster.layers.set(INTERACTIVE_LAYER);
@@ -233,7 +233,7 @@ export class Experience implements LoopCallback {
     this.setHandleHover(false);
     this.cameraTarget.copy(DEFAULT_CAMERA_TARGET);
 
-    gsap.to(this.camera.position, { x: 0, y: 3.0, z: 12, duration: 1, ease: "power2.out" });
+    gsap.to(this.camera.position, { x: 0, y: 3.1, z: 12.15, duration: 1, ease: "power2.out" });
     gsap.to(this.machine.group.position, { x: 0, y: 0, z: 0, duration: 0.5 });
     gsap.to(this.machine.group.rotation, { x: 0, y: 0, z: 0, duration: 0.5 });
     this.machine.handle.rotation.x = 0;
