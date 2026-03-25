@@ -6,7 +6,7 @@ export class Environment {
     this.createGround(scene);
     this.createGroundRing(scene);
     this.setupLights(scene);
-    scene.fog = new THREE.FogExp2(0x003333, 0.03);
+    scene.fog = new THREE.FogExp2(0x003333, 0.026);
   }
 
   private createSky(scene: THREE.Scene): void {
@@ -45,7 +45,7 @@ export class Environment {
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xfaab36,
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.16,
       side: THREE.DoubleSide,
     });
     const ring = new THREE.Mesh(ringGeo, ringMat);
@@ -56,11 +56,12 @@ export class Environment {
 
   private setupLights(scene: THREE.Scene): void {
     // Ambient — teal tint
-    scene.add(new THREE.AmbientLight(0x1a5c5c, 0.5));
+    scene.add(new THREE.AmbientLight(0x1d6662, 0.58));
+    scene.add(new THREE.HemisphereLight(0x2d8f89, 0x001818, 0.26));
 
     // Main key light — warm
-    const key = new THREE.DirectionalLight(0xffeedd, 0.9);
-    key.position.set(4, 8, 6);
+    const key = new THREE.DirectionalLight(0xfff1de, 1.05);
+    key.position.set(4.5, 8.5, 6.5);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
     key.shadow.camera.near = 0.5;
@@ -73,24 +74,24 @@ export class Environment {
     scene.add(key);
 
     // Fill — teal
-    const fill = new THREE.DirectionalLight(0x249ea0, 0.35);
-    fill.position.set(-4, 4, -3);
+    const fill = new THREE.DirectionalLight(0x249ea0, 0.42);
+    fill.position.set(-4.5, 4.5, -2.5);
     scene.add(fill);
 
     // Rim — orange backlight
-    const rim = new THREE.PointLight(0xf78104, 0.6, 15);
-    rim.position.set(0, 6, -5);
+    const rim = new THREE.PointLight(0xf78104, 0.72, 16);
+    rim.position.set(0, 6.4, -5.2);
     scene.add(rim);
 
     // Under glow — teal accent
-    const under = new THREE.PointLight(0x249ea0, 0.3, 8);
-    under.position.set(0, -0.5, 3);
+    const under = new THREE.PointLight(0x249ea0, 0.34, 9);
+    under.position.set(0, -0.35, 3);
     scene.add(under);
 
     // Spot on dome
-    const spot = new THREE.SpotLight(0xffffff, 0.5, 12, Math.PI * 0.15, 0.6);
-    spot.position.set(0, 10, 4);
-    spot.target.position.set(0, 3, 0);
+    const spot = new THREE.SpotLight(0xfff5ea, 0.68, 14, Math.PI * 0.16, 0.55);
+    spot.position.set(0.4, 10, 4.6);
+    spot.target.position.set(0, 3.2, 0);
     scene.add(spot);
     scene.add(spot.target);
   }
