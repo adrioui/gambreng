@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { PALETTE, STYLE_COLORS } from "@/config";
+import { applyOutlineParameters, createToonMaterial } from "@/materials/toon";
 import type { Participant } from "@/types";
 
 const BALL_RADIUS = 0.43;
@@ -27,11 +29,11 @@ export class CaptureBall {
   buttonFront: THREE.Group;
   buttonBack: THREE.Group;
   innerGlow: THREE.Mesh;
-  topMaterial: THREE.MeshStandardMaterial;
-  bottomMaterial: THREE.MeshStandardMaterial;
-  seamMaterial: THREE.MeshStandardMaterial;
-  buttonRingMaterial: THREE.MeshStandardMaterial;
-  buttonCoreMaterial: THREE.MeshStandardMaterial;
+  topMaterial: THREE.MeshToonMaterial;
+  bottomMaterial: THREE.MeshToonMaterial;
+  seamMaterial: THREE.MeshToonMaterial;
+  buttonRingMaterial: THREE.MeshToonMaterial;
+  buttonCoreMaterial: THREE.MeshToonMaterial;
   innerGlowMaterial: THREE.MeshBasicMaterial;
 
   constructor(participant: Participant, index: number) {
@@ -51,46 +53,44 @@ export class CaptureBall {
     );
 
     const participantColor = new THREE.Color(participant.color);
-    const topColor = participantColor.clone().lerp(new THREE.Color(0xfaab36), 0.16);
+    const topColor = participantColor.clone().lerp(new THREE.Color(STYLE_COLORS.accentSoft), 0.18);
 
-    this.topMaterial = new THREE.MeshStandardMaterial({
+    this.topMaterial = createToonMaterial({
       color: topColor,
-      metalness: 0.2,
-      roughness: 0.34,
-      emissive: topColor.clone().multiplyScalar(0.06),
-      emissiveIntensity: 0.2,
+      emissive: topColor.clone().multiplyScalar(0.2),
+      emissiveIntensity: 0.18,
+      outline: { thickness: 0.0036 },
     });
-    this.bottomMaterial = new THREE.MeshStandardMaterial({
-      color: 0xf1ebe0,
-      metalness: 0.12,
-      roughness: 0.42,
-      emissive: participantColor.clone().multiplyScalar(0.02),
-      emissiveIntensity: 0.06,
+    this.bottomMaterial = createToonMaterial({
+      color: PALETTE.paper.light,
+      emissive: participantColor.clone().multiplyScalar(0.08),
+      emissiveIntensity: 0.05,
+      outline: { thickness: 0.0036 },
     });
-    this.seamMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4a2b1a,
-      metalness: 0.78,
-      roughness: 0.28,
-      emissive: 0xffb563,
+    this.seamMaterial = createToonMaterial({
+      color: PALETTE.ink.soft,
+      emissive: STYLE_COLORS.accentSoft,
       emissiveIntensity: 0,
+      outline: { thickness: 0.0028 },
     });
-    this.buttonRingMaterial = new THREE.MeshStandardMaterial({
-      color: 0xb77a3e,
-      metalness: 0.8,
-      roughness: 0.2,
+    this.buttonRingMaterial = createToonMaterial({
+      color: PALETTE.earth.mid,
+      emissive: STYLE_COLORS.accentSoft,
+      emissiveIntensity: 0.1,
+      outline: { thickness: 0.0028 },
     });
-    this.buttonCoreMaterial = new THREE.MeshStandardMaterial({
-      color: 0xf6fbfb,
-      metalness: 0.18,
-      roughness: 0.26,
-      emissive: 0x59dccf,
-      emissiveIntensity: 0.08,
+    this.buttonCoreMaterial = createToonMaterial({
+      color: PALETTE.cream,
+      emissive: STYLE_COLORS.accentSoft,
+      emissiveIntensity: 0.12,
+      outline: { thickness: 0.0026 },
     });
     this.innerGlowMaterial = new THREE.MeshBasicMaterial({
       color: topColor,
       transparent: true,
       opacity: 0,
     });
+    applyOutlineParameters(this.innerGlowMaterial, { visible: false, keepAlive: false });
 
     this.topShell = new THREE.Mesh(topGeo, this.topMaterial);
     this.topShell.castShadow = true;
@@ -200,10 +200,10 @@ export class CaptureBall {
     this.innerGlow.scale.set(1, 1, 1);
     this.innerGlowMaterial.opacity = 0;
 
-    this.topMaterial.emissiveIntensity = 0.2;
-    this.bottomMaterial.emissiveIntensity = 0.06;
+    this.topMaterial.emissiveIntensity = 0.18;
+    this.bottomMaterial.emissiveIntensity = 0.05;
     this.seamMaterial.emissiveIntensity = 0;
-    this.buttonCoreMaterial.emissiveIntensity = 0.08;
+    this.buttonCoreMaterial.emissiveIntensity = 0.12;
   }
 
   addToScene(scene: THREE.Scene): void {
