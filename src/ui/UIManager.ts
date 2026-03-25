@@ -130,10 +130,19 @@ export class UIManager {
 
   showParticipantThemes(participants: Participant[]): void {
     this.participantThemesEl.innerHTML = participants
-      .map(
-        (p, i) =>
-          `<div class="theme-item p${i + 1}">P${i + 1}: ${this.escapeHtml(p.name)} — "${this.escapeHtml(p.theme)}"</div>`,
-      )
+      .map((participant, index) => {
+        const background = colorToHex(participant.color);
+        const foreground = this.getReadableTextColor(participant.color);
+        return `
+          <div
+            class="theme-item"
+            style="--theme-bg: ${background}; --theme-fg: ${foreground};"
+          >
+            <span class="theme-badge">P${index + 1}</span>
+            <span class="theme-copy">${this.escapeHtml(participant.name)} — "${this.escapeHtml(participant.theme)}"</span>
+          </div>
+        `;
+      })
       .join("");
     this.participantThemesEl.style.opacity = "1";
     this.participantThemesEl.classList.remove("hidden");
@@ -205,6 +214,14 @@ export class UIManager {
     this.winnerThemeEl.style.color = "";
     this.winnerParticipantEl.textContent = "";
     this.resultContent.style.borderColor = "";
+  }
+
+  private getReadableTextColor(color: number): string {
+    const red = (color >> 16) & 0xff;
+    const green = (color >> 8) & 0xff;
+    const blue = color & 0xff;
+    const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+    return luminance > 0.62 ? "#2d1a0e" : "#fffaf2";
   }
 
   private escapeHtml(text: string): string {
