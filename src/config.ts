@@ -1,34 +1,72 @@
 import type { Participant } from "@/types";
 
-export const DEFAULT_PARTICIPANTS: Participant[] = [
-  { name: "Peserta 1", theme: "Cyberpunk City", color: 0xfd5901 },
-  { name: "Peserta 2", theme: "Hutan Ajaib", color: 0xf78104 },
-  { name: "Peserta 3", theme: "Underwater World", color: 0x249ea0 },
-  { name: "Peserta 4", theme: "Steampunk", color: 0x005f60 },
-];
-
-const PALETTE = {
-  orange: { dark: 0xfd5901, mid: 0xf78104, gold: 0xfaab36 },
-  teal: { bright: 0x249ea0, mid: 0x008083, dark: 0x005f60, veryDark: 0x003d3d },
-  metal: { dark: 0x374151 },
+export const PALETTE = {
+  paper: { light: 0xf7f0e4, mid: 0xeadbc2, dark: 0xd7c2a0 },
+  earth: { light: 0xd6a06f, mid: 0xb86d44, dark: 0x7a4630 },
+  maroon: { mid: 0x7b3c3d, dark: 0x4a2426 },
+  olive: { mid: 0x9b8650, dark: 0x6d5c38 },
+  ink: { brown: 0x2d1a0e, soft: 0x543727 },
+  cream: 0xfffbf4,
   white: 0xffffff,
-  black: 0x000000,
+  black: 0x120d09,
 } as const;
 
-export const MACHINE_COLORS = {
-  foot: PALETTE.teal.dark,
-  base: PALETTE.orange.mid,
-  body: PALETTE.orange.gold,
-  panel: PALETTE.teal.mid,
-  trim: PALETTE.orange.dark,
-  dome: 0xaaddff,
-  cap: PALETTE.orange.gold,
+export const STYLE_COLORS = {
+  outline: PALETTE.ink.brown,
+  paper: PALETTE.paper.light,
+  paperShadow: PALETTE.paper.dark,
+  skyTop: PALETTE.cream,
+  skyMid: PALETTE.paper.mid,
+  skyBottom: 0xcfa579,
+  fog: 0xf3e7d6,
+  ground: 0xb98a60,
+  groundShadow: 0x8b6040,
+  accent: 0xd7783e,
+  accentSoft: 0xe4ab69,
+} as const;
 
-  chute: PALETTE.teal.mid,
-  handleStem: PALETTE.metal.dark,
-  handleBall: PALETTE.orange.dark,
-  star: PALETTE.teal.bright,
-  sidePanel: PALETTE.teal.dark,
+export const FX_COLORS = {
+  sparkles: [
+    PALETTE.cream,
+    PALETTE.paper.mid,
+    STYLE_COLORS.accentSoft,
+    PALETTE.maroon.mid,
+    PALETTE.olive.mid,
+  ],
+  confetti: [
+    STYLE_COLORS.accent,
+    STYLE_COLORS.accentSoft,
+    PALETTE.paper.mid,
+    PALETTE.paper.dark,
+    PALETTE.earth.mid,
+    PALETTE.maroon.mid,
+    PALETTE.olive.mid,
+    PALETTE.cream,
+  ],
+  floatingStars: [STYLE_COLORS.accentSoft, PALETTE.paper.mid, PALETTE.olive.mid],
+} as const;
+
+export const DEFAULT_PARTICIPANTS: Participant[] = [
+  { name: "Peserta 1", theme: "Cyberpunk City", color: 0xc8744b },
+  { name: "Peserta 2", theme: "Hutan Ajaib", color: 0xc49d54 },
+  { name: "Peserta 3", theme: "Underwater World", color: 0x8b8f5a },
+  { name: "Peserta 4", theme: "Steampunk", color: 0x8a4245 },
+];
+
+export const MACHINE_COLORS = {
+  foot: PALETTE.earth.dark,
+  base: PALETTE.earth.mid,
+  body: PALETTE.earth.light,
+  panel: PALETTE.paper.mid,
+  trim: PALETTE.maroon.mid,
+  dome: 0xfbf4ea,
+  cap: PALETTE.earth.light,
+
+  chute: PALETTE.paper.dark,
+  handleStem: PALETTE.ink.soft,
+  handleBall: STYLE_COLORS.accent,
+  star: PALETTE.olive.mid,
+  sidePanel: PALETTE.maroon.dark,
 } as const;
 
 const PARTICIPANT_SLOT_COUNT = 4;
