@@ -51,42 +51,43 @@ export class CaptureBall {
     );
 
     const participantColor = new THREE.Color(participant.color);
+    const topColor = participantColor.clone().lerp(new THREE.Color(0xfaab36), 0.16);
 
     this.topMaterial = new THREE.MeshStandardMaterial({
-      color: participant.color,
-      metalness: 0.24,
-      roughness: 0.28,
-      emissive: participantColor.clone().multiplyScalar(0.08),
-      emissiveIntensity: 0.15,
+      color: topColor,
+      metalness: 0.2,
+      roughness: 0.34,
+      emissive: topColor.clone().multiplyScalar(0.06),
+      emissiveIntensity: 0.2,
     });
     this.bottomMaterial = new THREE.MeshStandardMaterial({
-      color: 0xf7f4ef,
-      metalness: 0.08,
-      roughness: 0.34,
-      emissive: 0x102030,
-      emissiveIntensity: 0.03,
+      color: 0xf1ebe0,
+      metalness: 0.12,
+      roughness: 0.42,
+      emissive: participantColor.clone().multiplyScalar(0.02),
+      emissiveIntensity: 0.06,
     });
     this.seamMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0b1118,
-      metalness: 0.72,
-      roughness: 0.22,
-      emissive: 0x74e3ff,
+      color: 0x4a2b1a,
+      metalness: 0.78,
+      roughness: 0.28,
+      emissive: 0xffb563,
       emissiveIntensity: 0,
     });
     this.buttonRingMaterial = new THREE.MeshStandardMaterial({
-      color: 0xd3dde3,
-      metalness: 0.82,
-      roughness: 0.16,
+      color: 0xb77a3e,
+      metalness: 0.8,
+      roughness: 0.2,
     });
     this.buttonCoreMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      metalness: 0.22,
-      roughness: 0.18,
-      emissive: 0x7fe8ff,
-      emissiveIntensity: 0.12,
+      color: 0xf6fbfb,
+      metalness: 0.18,
+      roughness: 0.26,
+      emissive: 0x59dccf,
+      emissiveIntensity: 0.08,
     });
     this.innerGlowMaterial = new THREE.MeshBasicMaterial({
-      color: participant.color,
+      color: topColor,
       transparent: true,
       opacity: 0,
     });
@@ -101,7 +102,7 @@ export class CaptureBall {
     this.bottomShell.receiveShadow = true;
 
     this.seamRing = new THREE.Mesh(
-      new THREE.TorusGeometry(BALL_RADIUS * 0.985, 0.028, 12, 48),
+      new THREE.TorusGeometry(BALL_RADIUS * 0.982, 0.024, 12, 48),
       this.seamMaterial,
     );
     this.seamRing.rotation.x = Math.PI / 2;
@@ -109,12 +110,12 @@ export class CaptureBall {
     this.seamRing.receiveShadow = true;
 
     this.buttonFront = this.createButton();
-    this.buttonFront.position.z = SEAM_OFFSET_Z;
+    this.buttonFront.position.set(0, 0.025, SEAM_OFFSET_Z - 0.008);
 
     this.buttonBack = this.createButton();
-    this.buttonBack.position.z = -SEAM_OFFSET_Z;
+    this.buttonBack.position.set(0, 0.018, -SEAM_OFFSET_Z + 0.008);
     this.buttonBack.rotation.y = Math.PI;
-    this.buttonBack.scale.setScalar(0.92);
+    this.buttonBack.scale.setScalar(0.82);
 
     this.innerGlow = new THREE.Mesh(new THREE.SphereGeometry(0.19, 24, 24), this.innerGlowMaterial);
     this.innerGlow.visible = false;
@@ -136,14 +137,14 @@ export class CaptureBall {
     const button = new THREE.Group();
 
     const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(0.105, 0.018, 10, 32),
+      new THREE.TorusGeometry(0.098, 0.016, 10, 32),
       this.buttonRingMaterial,
     );
     ring.castShadow = true;
     ring.receiveShadow = true;
 
     const core = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.058, 0.058, 0.03, 24),
+      new THREE.CylinderGeometry(0.05, 0.05, 0.024, 24),
       this.buttonCoreMaterial,
     );
     core.rotation.x = Math.PI / 2;
@@ -151,8 +152,14 @@ export class CaptureBall {
     core.castShadow = true;
     core.receiveShadow = true;
 
+    const lens = new THREE.Mesh(new THREE.SphereGeometry(0.022, 16, 12), this.buttonCoreMaterial);
+    lens.position.z = 0.024;
+    lens.castShadow = true;
+    lens.receiveShadow = true;
+
     button.add(ring);
     button.add(core);
+    button.add(lens);
     return button;
   }
 
@@ -181,21 +188,22 @@ export class CaptureBall {
     this.seamRing.visible = true;
     this.seamRing.scale.set(1, 1, 1);
 
-    this.buttonFront.position.set(0, 0, SEAM_OFFSET_Z);
+    this.buttonFront.position.set(0, 0.025, SEAM_OFFSET_Z - 0.008);
     this.buttonFront.rotation.set(0, 0, 0);
     this.buttonFront.scale.set(1, 1, 1);
 
-    this.buttonBack.position.set(0, 0, -SEAM_OFFSET_Z);
+    this.buttonBack.position.set(0, 0.018, -SEAM_OFFSET_Z + 0.008);
     this.buttonBack.rotation.set(0, Math.PI, 0);
-    this.buttonBack.scale.setScalar(0.92);
+    this.buttonBack.scale.setScalar(0.82);
 
     this.innerGlow.visible = false;
     this.innerGlow.scale.set(1, 1, 1);
     this.innerGlowMaterial.opacity = 0;
 
-    this.topMaterial.emissiveIntensity = 0.15;
+    this.topMaterial.emissiveIntensity = 0.2;
+    this.bottomMaterial.emissiveIntensity = 0.06;
     this.seamMaterial.emissiveIntensity = 0;
-    this.buttonCoreMaterial.emissiveIntensity = 0.12;
+    this.buttonCoreMaterial.emissiveIntensity = 0.08;
   }
 
   addToScene(scene: THREE.Scene): void {
