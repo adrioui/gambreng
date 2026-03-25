@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      issues: write
 
     steps:
       - name: Check out repository
@@ -39,6 +40,7 @@ jobs:
         run: npm run build
 
       - name: Deploy PR preview to Cloudflare Pages
+        id: deploy_preview
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: cloudflare/wrangler-action@v3
         with:
@@ -47,7 +49,61 @@ jobs:
           command: pages deploy dist --project-name=gambreng --branch=${{ github.head_ref }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Comment PR with preview URL
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v7
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy_preview.outputs.deployment-url }}
+          DEPLOYMENT_ALIAS_URL: ${{ steps.deploy_preview.outputs.pages-deployment-alias-url }}
+        with:
+          script: |
+            const marker = "<!-- cloudflare-pages-preview -->";
+            const deploymentUrl = process.env.DEPLOYMENT_URL;
+            const aliasUrl = process.env.DEPLOYMENT_ALIAS_URL || deploymentUrl;
+
+            if (!deploymentUrl) {
+              core.setFailed("Missing Cloudflare deployment URL output");
+              return;
+            }
+
+            const body = [
+              marker,
+              "## Cloudflare Pages Preview",
+              `- Preview alias: ${aliasUrl}`,
+              `- Deployment URL: ${deploymentUrl}`,
+              `- Commit: ${context.payload.pull_request?.head?.sha ?? context.sha}`,
+            ].join("\n");
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100,
+            });
+
+            const existing = comments.find(
+              (comment) => comment.user?.type === "Bot" && comment.body?.includes(marker),
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+
       - name: Deploy production to Cloudflare Pages
+        id: deploy_production
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: cloudflare/wrangler-action@v3
         with:
