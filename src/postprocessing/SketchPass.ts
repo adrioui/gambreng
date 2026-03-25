@@ -10,9 +10,9 @@ const sketchShader = {
     time: { value: 0 },
     edgeColor: { value: new THREE.Color(STYLE_COLORS.outline) },
     paperTint: { value: new THREE.Color(STYLE_COLORS.paper) },
-    edgeStrength: { value: 0.72 },
-    paperStrength: { value: 0.18 },
-    wobbleStrength: { value: 0.85 },
+    edgeStrength: { value: 0.38 },
+    paperStrength: { value: 0.08 },
+    wobbleStrength: { value: 0.42 },
   },
   vertexShader: /* glsl */ `
     varying vec2 vUv;
@@ -83,10 +83,10 @@ const sketchShader = {
       float fiber = sin((vUv.y + noise(vUv * 14.0) * 0.012) * resolution.y * 0.1);
       float paper = (coarseGrain - 0.5) * 0.18 + (fineGrain - 0.5) * 0.06 + fiber * 0.025;
 
-      vec3 warmed = base * mix(vec3(1.0), paperTint, 0.14);
+      vec3 warmed = base * mix(vec3(1.0), paperTint, 0.06);
       warmed += paperTint * paper * paperStrength;
 
-      vec3 finalColor = mix(warmed, edgeColor, clamp(edge * edgeStrength, 0.0, 0.88));
+      vec3 finalColor = mix(warmed, edgeColor, clamp(edge * edgeStrength, 0.0, 0.42));
       gl_FragColor = vec4(finalColor, 1.0);
     }
   `,
