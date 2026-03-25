@@ -1,16 +1,16 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 import { createTrimMaterial } from "@/objects/machine/materials";
 import { createRoundedBox } from "@/utils/roundedBox";
 
 export function createBody(group: THREE.Group): void {
   // Main body — rounded box
-  const bodyMat = new THREE.MeshStandardMaterial({
+  const bodyMat = createToonMaterial({
     color: MACHINE_COLORS.body,
-    metalness: 0.12,
-    roughness: 0.66,
-    emissive: 0x8c5d14,
-    emissiveIntensity: 0.05,
+    emissive: PALETTE.earth.dark,
+    emissiveIntensity: 0.08,
+    outline: { thickness: 0.0046 },
   });
   const body = createRoundedBox(3.0, 2.8, 2.4, 0.2);
   body.material = bodyMat;
@@ -20,12 +20,11 @@ export function createBody(group: THREE.Group): void {
   group.add(body);
 
   // Front face panel — slightly inset rectangle on front
-  const panelMat = new THREE.MeshStandardMaterial({
+  const panelMat = createToonMaterial({
     color: MACHINE_COLORS.panel,
-    metalness: 0.24,
-    roughness: 0.5,
-    emissive: 0x0d3e40,
-    emissiveIntensity: 0.08,
+    emissive: PALETTE.paper.dark,
+    emissiveIntensity: 0.04,
+    outline: { thickness: 0.0036 },
   });
   const panel = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.6, 0.1), panelMat);
   panel.position.set(0, 2, 1.3);

@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 import { createTrimMaterial } from "@/objects/machine/materials";
 
 export function createNestTray(group: THREE.Group): THREE.Mesh {
@@ -9,18 +10,18 @@ export function createNestTray(group: THREE.Group): THREE.Mesh {
   const bowlDepth = 0.3;
   const segments = 20;
   for (let i = 0; i <= segments; i++) {
-    const t = (i / segments) * Math.PI * 0.5; // 0 to 90°
+    const t = (i / segments) * Math.PI * 0.5;
     points.push(new THREE.Vector2(bowlRadius * Math.sin(t), -bowlDepth * Math.cos(t)));
   }
-  // Add outer rim lip
   points.push(new THREE.Vector2(bowlRadius + 0.05, 0));
   points.push(new THREE.Vector2(bowlRadius + 0.05, 0.05));
 
   const bowlGeo = new THREE.LatheGeometry(points, 32);
-  const bowlMat = new THREE.MeshStandardMaterial({
+  const bowlMat = createToonMaterial({
     color: MACHINE_COLORS.chute,
-    metalness: 0.3,
-    roughness: 0.5,
+    emissive: PALETTE.paper.dark,
+    emissiveIntensity: 0.05,
+    outline: { thickness: 0.0038 },
   });
   const bowl = new THREE.Mesh(bowlGeo, bowlMat);
   bowl.position.set(0, 0.85, 1.7);

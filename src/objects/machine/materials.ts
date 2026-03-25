@@ -1,10 +1,12 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 
-export function createTrimMaterial(): THREE.MeshStandardMaterial {
-  return new THREE.MeshStandardMaterial({
+export function createTrimMaterial(): THREE.MeshToonMaterial {
+  return createToonMaterial({
     color: MACHINE_COLORS.trim,
-    metalness: 0.7,
-    roughness: 0.25,
+    emissive: PALETTE.ink.soft,
+    emissiveIntensity: 0.08,
+    outline: { thickness: 0.0042 },
   });
 }

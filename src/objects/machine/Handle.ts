@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE, STYLE_COLORS } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 
 /** Raycasting layer for interactive objects */
 export const INTERACTIVE_LAYER = 1;
@@ -7,10 +8,11 @@ export const INTERACTIVE_LAYER = 1;
 export function createHandle(group: THREE.Group): THREE.Group {
   const handle = new THREE.Group();
 
-  const stemMat = new THREE.MeshStandardMaterial({
+  const stemMat = createToonMaterial({
     color: MACHINE_COLORS.handleStem,
-    metalness: 0.6,
-    roughness: 0.3,
+    emissive: PALETTE.ink.soft,
+    emissiveIntensity: 0.08,
+    outline: { thickness: 0.0036 },
   });
 
   const handleStem = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.5, 12), stemMat);
@@ -26,10 +28,11 @@ export function createHandle(group: THREE.Group): THREE.Group {
 
   const handleBall = new THREE.Mesh(
     new THREE.SphereGeometry(0.15, 16, 16),
-    new THREE.MeshStandardMaterial({
+    createToonMaterial({
       color: MACHINE_COLORS.handleBall,
-      metalness: 0.7,
-      roughness: 0.2,
+      emissive: STYLE_COLORS.accentSoft,
+      emissiveIntensity: 0.14,
+      outline: { thickness: 0.0032 },
     }),
   );
   handleBall.position.set(0, 0.78, 1.8);

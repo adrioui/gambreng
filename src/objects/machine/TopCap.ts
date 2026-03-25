@@ -1,26 +1,29 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE, STYLE_COLORS } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 import { createTrimMaterial } from "@/objects/machine/materials";
 
 export function createTopCap(group: THREE.Group): void {
   // Cap
-  const capMat = new THREE.MeshStandardMaterial({
+  const capMat = createToonMaterial({
     color: MACHINE_COLORS.cap,
-    metalness: 0.15,
-    roughness: 0.6,
+    emissive: PALETTE.earth.dark,
+    emissiveIntensity: 0.07,
+    outline: { thickness: 0.0044 },
   });
   const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.82, 0.56, 32), capMat);
   cap.position.y = 5.18;
   cap.castShadow = true;
   group.add(cap);
 
-  // Golden knob
+  // Knob
   const knob = new THREE.Mesh(
     new THREE.SphereGeometry(0.25, 16, 16),
-    new THREE.MeshStandardMaterial({
+    createToonMaterial({
       color: MACHINE_COLORS.handleBall,
-      metalness: 0.7,
-      roughness: 0.2,
+      emissive: STYLE_COLORS.accentSoft,
+      emissiveIntensity: 0.12,
+      outline: { thickness: 0.0038 },
     }),
   );
   knob.position.y = 5.6;

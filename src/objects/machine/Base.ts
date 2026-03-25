@@ -1,19 +1,21 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 import { createTrimMaterial } from "@/objects/machine/materials";
 
 export function createBase(group: THREE.Group): void {
   // Feet (4 stubby legs at box corners)
-  const footMat = new THREE.MeshStandardMaterial({
+  const footMat = createToonMaterial({
     color: MACHINE_COLORS.foot,
-    metalness: 0.4,
-    roughness: 0.6,
+    emissive: PALETTE.ink.soft,
+    emissiveIntensity: 0.05,
+    outline: { thickness: 0.0042 },
   });
   const footPositions: [number, number][] = [
-    [-1.3, -1.0], // front-left (x, z)
-    [1.3, -1.0], // front-right
-    [-1.3, 1.0], // back-left
-    [1.3, 1.0], // back-right
+    [-1.3, -1.0],
+    [1.3, -1.0],
+    [-1.3, 1.0],
+    [1.3, 1.0],
   ];
   footPositions.forEach(([x, z]) => {
     const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.3, 8), footMat);
@@ -23,10 +25,11 @@ export function createBase(group: THREE.Group): void {
   });
 
   // Base platform — rectangular
-  const baseMat = new THREE.MeshStandardMaterial({
+  const baseMat = createToonMaterial({
     color: MACHINE_COLORS.base,
-    metalness: 0.15,
-    roughness: 0.7,
+    emissive: PALETTE.earth.dark,
+    emissiveIntensity: 0.08,
+    outline: { thickness: 0.0044 },
   });
   const base = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.5, 2.6), baseMat);
   base.position.y = 0.55;

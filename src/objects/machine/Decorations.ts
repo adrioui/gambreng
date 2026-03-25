@@ -1,12 +1,14 @@
 import * as THREE from "three";
-import { MACHINE_COLORS } from "@/config";
+import { MACHINE_COLORS, PALETTE, STYLE_COLORS } from "@/config";
+import { createToonMaterial } from "@/materials/toon";
 
 export function createDecorations(group: THREE.Group): void {
   // Star studs
-  const starMat = new THREE.MeshStandardMaterial({
+  const starMat = createToonMaterial({
     color: MACHINE_COLORS.star,
-    metalness: 0.6,
-    roughness: 0.3,
+    emissive: STYLE_COLORS.accentSoft,
+    emissiveIntensity: 0.12,
+    outline: { thickness: 0.003 },
   });
   const starPositions: [number, number, number][] = [
     [-1.0, 1.5, 1.0],
@@ -15,17 +17,18 @@ export function createDecorations(group: THREE.Group): void {
     [0.7, 2.7, 1.15],
     [0, 3.2, 1.2],
   ];
-  starPositions.forEach((p) => {
+  starPositions.forEach((position) => {
     const star = new THREE.Mesh(new THREE.OctahedronGeometry(0.1, 0), starMat);
-    star.position.set(...p);
+    star.position.set(...position);
     group.add(star);
   });
 
   // Side panels
-  const sideMat = new THREE.MeshStandardMaterial({
+  const sideMat = createToonMaterial({
     color: MACHINE_COLORS.sidePanel,
-    metalness: 0.1,
-    roughness: 0.8,
+    emissive: PALETTE.ink.soft,
+    emissiveIntensity: 0.05,
+    outline: { thickness: 0.004 },
   });
   ([-1, 1] as const).forEach((side) => {
     const sidePanel = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2, 1.5), sideMat);
