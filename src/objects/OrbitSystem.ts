@@ -2,10 +2,10 @@ import * as THREE from "three";
 import type { CaptureBall } from "@/objects/CaptureBall";
 
 const TRAIL_COUNT = 8;
-const ORBIT_CENTER_Y = 4.02;
-const OUTSIDE_RADIUS_X = 1.88;
-const OUTSIDE_RADIUS_Z = 1.36;
-const INSIDE_RADIUS = 0.78;
+const ORBIT_CENTER_Y = 3.98;
+const OUTSIDE_RADIUS_X = 1.9;
+const OUTSIDE_RADIUS_Z = 1.34;
+const INSIDE_RADIUS = 0.76;
 
 type TrailState = {
   position: THREE.Vector3;
@@ -175,11 +175,11 @@ export class OrbitSystem {
   }
 
   private computeOutsidePosition(angle: number, phase: number, elapsed: number): THREE.Vector3 {
-    const radialBreath = 0.04 + Math.sin(elapsed * 0.75 + phase) * 0.03;
+    const radialBreath = 0.035 + Math.sin(elapsed * 0.75 + phase) * 0.025;
     const radiusX = OUTSIDE_RADIUS_X + radialBreath;
-    const radiusZ = OUTSIDE_RADIUS_Z + radialBreath * 0.65;
-    const lift = Math.sin(angle + phase * 0.18) * 0.18;
-    const drift = Math.sin(elapsed * 0.9 + phase) * 0.05;
+    const radiusZ = OUTSIDE_RADIUS_Z + radialBreath * 0.6;
+    const lift = Math.sin(angle + phase * 0.18) * 0.13;
+    const drift = Math.sin(elapsed * 0.9 + phase) * 0.04;
 
     return new THREE.Vector3(
       Math.cos(angle) * radiusX,
@@ -198,8 +198,8 @@ export class OrbitSystem {
       Math.cos(swirlAngle) * swirlRadius + Math.sin(elapsed * 2.6 + phase) * 0.16 * this.chaos,
       ORBIT_CENTER_Y -
         0.02 +
-        Math.sin(swirlAngle * 1.4 + phase) * 0.18 +
-        Math.cos(elapsed * 2.3 + phase) * 0.12 * this.chaos,
+        Math.sin(swirlAngle * 1.4 + phase) * 0.15 +
+        Math.cos(elapsed * 2.3 + phase) * 0.1 * this.chaos,
       Math.sin(swirlAngle * 1.1 + phase * 0.25) * swirlRadius * 0.82 +
         Math.cos(elapsed * 2.8 + phase) * 0.14 * this.chaos,
     );
