@@ -36,9 +36,9 @@ export function playSpinAnimation(
     const sTL = gsap.timeline();
     for (let j = 0; j < 25; j++) {
       sTL.to(capsule.group.position, {
-        x: (Math.random() - 0.5) * 1.8,
-        y: 3.5 + Math.random() * 1.5,
-        z: (Math.random() - 0.5) * 1.2,
+        x: (Math.random() - 0.5) * 1.6,
+        y: 3.5 + Math.random() * 1.2,
+        z: (Math.random() - 0.5) * 1.0,
         duration: 0.06 + Math.random() * 0.08,
       });
       sTL.to(

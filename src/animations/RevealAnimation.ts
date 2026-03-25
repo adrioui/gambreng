@@ -30,14 +30,14 @@ export function playRevealAnimation(
   const w = capsules[winnerIndex];
 
   // Winner to chute
-  tl.to(w.group.position, { x: 0, y: 1.5, z: 2.2, duration: 0.8, ease: "power2.out" }, 0.4);
+  tl.to(w.group.position, { x: 0, y: 1.5, z: 1.9, duration: 0.8, ease: "power2.out" }, 0.4);
   tl.to(w.group.rotation, { x: 0, y: Math.PI * 2, z: 0, duration: 0.8, ease: "power2.out" }, 0.4);
 
   // Pop forward
-  tl.to(w.group.position, { x: 0, y: 2.5, z: 4, duration: 0.5, ease: "back.out(1.5)" }, ">0.1");
+  tl.to(w.group.position, { x: 0, y: 2.5, z: 3.5, duration: 0.5, ease: "back.out(1.5)" }, ">0.1");
 
   // Camera zoom
-  tl.to(camera.position, { z: 7.5, y: 3, duration: 0.8, ease: "power2.out" }, "<");
+  tl.to(camera.position, { z: 10.5, y: 2.8, duration: 0.8, ease: "power2.out" }, "<");
 
   // Scale up
   tl.to(

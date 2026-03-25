@@ -10,7 +10,7 @@ export function playEntryAnimation(
   const tl = gsap.timeline();
 
   // Camera move closer
-  tl.to(camera.position, { z: 8, y: 3.2, duration: 1, ease: "power2.inOut" }, 0);
+  tl.to(camera.position, { z: 10.5, y: 2.8, duration: 1, ease: "power2.inOut" }, 0);
 
   capsules.forEach((capsule, i) => {
     capsule.group.rotation.set(0, 0, 0);
@@ -22,7 +22,7 @@ export function playEntryAnimation(
       {
         x: -1.8 + i * 1.2,
         y: 2.5,
-        z: 3.5,
+        z: 3.0,
         duration: 0.9,
         ease: "back.out(1.5)",
       },
@@ -43,9 +43,9 @@ export function playEntryAnimation(
     tl.to(
       capsule.group.position,
       {
-        x: (Math.random() - 0.5) * 1.2,
-        y: 4 + Math.random() * 0.8,
-        z: (Math.random() - 0.5) * 0.8,
+        x: (Math.random() - 0.5) * 1.0,
+        y: 4 + Math.random() * 0.6,
+        z: (Math.random() - 0.5) * 0.6,
         duration: 0.7,
         ease: "power3.in",
       },
@@ -56,7 +56,7 @@ export function playEntryAnimation(
     tl.to(
       capsule.group.position,
       {
-        y: 3.8 + Math.random() * 0.6,
+        y: 3.8 + Math.random() * 0.5,
         duration: 0.5,
         ease: "bounce.out",
       },

@@ -42,8 +42,8 @@ export class Experience implements LoopCallback {
     this.sizes = new Sizes();
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(40, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.camera.position.set(0, 3.5, 9);
-    this.camera.lookAt(0, 2, 0);
+    this.camera.position.set(0, 3.0, 12);
+    this.camera.lookAt(0, 2.5, 0);
     this.renderer = new Renderer(canvas, this.sizes);
     this.loop = new Loop();
 
@@ -90,16 +90,16 @@ export class Experience implements LoopCallback {
       this.machine.group.rotation.y = Math.sin(elapsed * 0.3) * 0.03;
       this.capsules.forEach((c, i) => {
         const a = elapsed * 0.4 + i * Math.PI * 0.5;
-        c.group.position.x = Math.cos(a) * 2.2;
-        c.group.position.z = Math.sin(a) * 2.2;
-        c.group.position.y = 6 + Math.sin(elapsed * 1.2 + i) * 0.3;
+        c.group.position.x = Math.cos(a) * 2.0;
+        c.group.position.z = Math.sin(a) * 2.0;
+        c.group.position.y = 5.2 + Math.sin(elapsed * 1.2 + i) * 0.2;
         c.group.rotation.y += 0.015;
         c.group.rotation.x = Math.sin(elapsed * 0.8 + i) * 0.2;
       });
     } else if (this.gameState.is(GameStateType.Ready)) {
       this.machine.group.position.y = Math.sin(elapsed * 0.7) * 0.02;
       this.capsules.forEach((c, i) => {
-        c.group.position.y = 3.8 + Math.sin(elapsed * 1.8 + i * 1.3) * 0.1;
+        c.group.position.y = 3.8 + Math.sin(elapsed * 1.8 + i * 1.3) * 0.08;
         c.group.rotation.x += 0.003;
         c.group.rotation.y += 0.005;
       });
@@ -179,13 +179,19 @@ export class Experience implements LoopCallback {
     this.ui.resetAll();
     this.ui.setEditEnabled(true);
 
-    gsap.to(this.camera.position, { x: 0, y: 3.5, z: 9, duration: 1, ease: "power2.out" });
+    gsap.to(this.camera.position, { x: 0, y: 3.0, z: 12, duration: 1, ease: "power2.out" });
     gsap.to(this.machine.group.position, { x: 0, y: 0, z: 0, duration: 0.5 });
     gsap.to(this.machine.group.rotation, { x: 0, y: 0, z: 0, duration: 0.5 });
     this.machine.handle.rotation.x = 0;
 
     this.capsules.forEach((c, i) => {
-      gsap.to(c.group.position, { x: -2 + i * 1.3, y: 6, z: 0, duration: 0.8, ease: "power2.out" });
+      gsap.to(c.group.position, {
+        x: -2 + i * 1.3,
+        y: 5.2,
+        z: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      });
       gsap.to(c.group.rotation, { x: 0, y: 0, z: 0, duration: 0.8 });
       gsap.to(c.group.scale, { x: 1, y: 1, z: 1, duration: 0.5 });
     });
