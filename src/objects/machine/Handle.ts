@@ -12,11 +12,11 @@ export function createHandle(group: THREE.Group): THREE.Group {
 
   const handleStem = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.5, 12), stemMat);
   handleStem.rotation.x = Math.PI / 2;
-  handleStem.position.set(0, 1.7, 1.85);
+  handleStem.position.set(0, 1.7, 1.55);
   handle.add(handleStem);
 
   const handleArm = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.9, 0.06), stemMat);
-  handleArm.position.set(0, 1.25, 2.1);
+  handleArm.position.set(0, 1.25, 1.8);
   handle.add(handleArm);
 
   const handleBall = new THREE.Mesh(
@@ -27,7 +27,7 @@ export function createHandle(group: THREE.Group): THREE.Group {
       roughness: 0.2,
     }),
   );
-  handleBall.position.set(0, 0.78, 2.1);
+  handleBall.position.set(0, 0.78, 1.8);
   handle.add(handleBall);
 
   group.add(handle);

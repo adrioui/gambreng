@@ -2,9 +2,16 @@ import * as THREE from "three";
 
 export function createLabel(group: THREE.Group): void {
   const stickerLoader = new THREE.TextureLoader();
-  const stickerMat = new THREE.MeshBasicMaterial({ transparent: true });
+  const stickerMat = new THREE.MeshBasicMaterial({
+    transparent: true,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1,
+  });
   const stickerMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.55), stickerMat);
-  stickerMesh.position.set(0, 2.9, 1.57);
+  stickerMesh.position.set(0, 2.9, 1.32);
+  stickerMesh.renderOrder = 1;
   group.add(stickerMesh);
 
   stickerLoader.load(

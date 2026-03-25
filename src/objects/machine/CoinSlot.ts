@@ -11,7 +11,7 @@ export function createCoinSlot(group: THREE.Group): void {
       roughness: 0.4,
     }),
   );
-  slotPlate.position.set(0, 2.2, 1.62);
+  slotPlate.position.set(0, 2.2, 1.3);
   group.add(slotPlate);
 
   // Coin slot opening
@@ -19,6 +19,6 @@ export function createCoinSlot(group: THREE.Group): void {
     new THREE.BoxGeometry(0.5, 0.08, 0.15),
     new THREE.MeshStandardMaterial({ color: PALETTE.black }),
   );
-  slot.position.set(0, 2.2, 1.68);
+  slot.position.set(0, 2.2, 1.36);
   group.add(slot);
 }

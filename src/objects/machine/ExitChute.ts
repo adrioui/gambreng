@@ -9,7 +9,7 @@ export function createExitChute(group: THREE.Group): void {
     roughness: 0.5,
   });
   const chute = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.9, 1.0), chuteMat);
-  chute.position.set(0, 0.75, 2.0);
+  chute.position.set(0, 0.75, 1.7);
   chute.castShadow = true;
   group.add(chute);
 
@@ -18,7 +18,7 @@ export function createExitChute(group: THREE.Group): void {
     new THREE.BoxGeometry(0.9, 0.6, 0.12),
     new THREE.MeshStandardMaterial({ color: PALETTE.black }),
   );
-  opening.position.set(0, 0.8, 2.52);
+  opening.position.set(0, 0.8, 2.22);
   group.add(opening);
 
   // Chute trim
@@ -28,6 +28,6 @@ export function createExitChute(group: THREE.Group): void {
     roughness: 0.25,
   });
   const chuteTrim = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.75, 0.08), trimMat);
-  chuteTrim.position.set(0, 0.8, 2.54);
+  chuteTrim.position.set(0, 0.8, 2.24);
   group.add(chuteTrim);
 }

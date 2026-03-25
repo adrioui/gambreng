@@ -9,11 +9,11 @@ export function createDecorations(group: THREE.Group): void {
     roughness: 0.3,
   });
   const starPositions: [number, number, number][] = [
-    [-1.1, 1.5, 1.3],
-    [1.1, 1.5, 1.3],
-    [-0.8, 2.7, 1.45],
-    [0.8, 2.7, 1.45],
-    [0, 3.2, 1.5],
+    [-1.0, 1.5, 1.0],
+    [1.0, 1.5, 1.0],
+    [-0.7, 2.7, 1.15],
+    [0.7, 2.7, 1.15],
+    [0, 3.2, 1.2],
   ];
   starPositions.forEach((p) => {
     const star = new THREE.Mesh(new THREE.OctahedronGeometry(0.1, 0), starMat);
@@ -29,7 +29,7 @@ export function createDecorations(group: THREE.Group): void {
   });
   ([-1, 1] as const).forEach((side) => {
     const sidePanel = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2, 1.5), sideMat);
-    sidePanel.position.set(side * 1.55, 2.1, 0.3);
+    sidePanel.position.set(side * 1.55, 2.1, 0);
     group.add(sidePanel);
   });
 }
