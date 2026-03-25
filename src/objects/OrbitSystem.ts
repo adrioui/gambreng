@@ -47,10 +47,15 @@ export class OrbitSystem {
 
           const materials = Array.isArray(child.material) ? child.material : [child.material];
           materials.forEach((material) => {
-            if (!(material instanceof THREE.MeshStandardMaterial)) return;
             material.transparent = true;
             material.opacity = 0.45 * (1 - trailIndex / TRAIL_COUNT);
             material.depthWrite = false;
+
+            material.userData.outlineParameters = {
+              ...material.userData.outlineParameters,
+              visible: false,
+              keepAlive: false,
+            };
           });
         });
         this.scene.add(clone);
