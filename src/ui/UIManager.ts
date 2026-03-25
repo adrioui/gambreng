@@ -59,18 +59,28 @@ export class UIManager {
 
   openEditor(participants: Participant[]): void {
     this.editorRows.innerHTML = "";
-    participants.forEach((p, i) => {
+    participants.forEach((participant, index) => {
       const row = document.createElement("div");
       row.className = "editor-row";
-      const colorHex = colorToHex(p.color);
+      const colorHex = colorToHex(participant.color);
+      row.style.setProperty("--row-accent", colorHex);
       row.innerHTML = `
-        <label>Peserta ${i + 1}</label>
+        <label>Peserta ${index + 1}</label>
         <div class="row-fields">
-          <input type="text" name="name-${i}" value="${this.escapeHtml(p.name)}" placeholder="Nama">
-          <input type="text" name="theme-${i}" value="${this.escapeHtml(p.theme)}" placeholder="Tema">
-          <input type="color" name="color-${i}" value="${colorHex}">
+          <input type="text" name="name-${index}" value="${this.escapeHtml(participant.name)}" placeholder="Nama">
+          <input type="text" name="theme-${index}" value="${this.escapeHtml(participant.theme)}" placeholder="Tema">
+          <input type="color" name="color-${index}" value="${colorHex}">
         </div>
+        <p class="row-note">warna peserta • ${colorHex.toUpperCase()}</p>
       `;
+      const colorInput = row.querySelector(`[name="color-${index}"]`) as HTMLInputElement;
+      colorInput.addEventListener("input", () => {
+        row.style.setProperty("--row-accent", colorInput.value);
+        const rowNote = row.querySelector(".row-note");
+        if (rowNote) {
+          rowNote.textContent = `warna peserta • ${colorInput.value.toUpperCase()}`;
+        }
+      });
       this.editorRows.appendChild(row);
     });
     this.editorOverlay.classList.remove("hidden");
@@ -139,7 +149,10 @@ export class UIManager {
             style="--theme-bg: ${background}; --theme-fg: ${foreground};"
           >
             <span class="theme-badge">P${index + 1}</span>
-            <span class="theme-copy">${this.escapeHtml(participant.name)} — "${this.escapeHtml(participant.theme)}"</span>
+            <div class="theme-copy">
+              <span class="theme-name">${this.escapeHtml(participant.name)}</span>
+              <span class="theme-theme">"${this.escapeHtml(participant.theme)}"</span>
+            </div>
           </div>
         `;
       })
@@ -166,12 +179,14 @@ export class UIManager {
   }
 
   showResult(winner: Participant): void {
-    const col = colorToHex(winner.color);
+    const colorHex = colorToHex(winner.color);
     gsap.killTweensOf(this.resultContent);
     this.winnerThemeEl.textContent = `"${winner.theme}"`;
-    this.winnerThemeEl.style.color = col;
+    this.winnerThemeEl.style.color = colorHex;
     this.winnerParticipantEl.textContent = `Diusulkan oleh: ${winner.name}`;
-    this.resultContent.style.borderColor = col;
+    this.resultContent.style.borderColor = colorHex;
+    this.resultContent.style.setProperty("--winner-color", colorHex);
+    this.resultOverlay.style.setProperty("--winner-color", colorHex);
     this.resultContent.style.transform = "";
     this.resultOverlay.classList.remove("hidden");
     gsap.from(this.resultContent, {
@@ -188,6 +203,8 @@ export class UIManager {
     if (immediate) {
       this.resultOverlay.classList.add("hidden");
       this.resultContent.style.transform = "";
+      this.resultContent.style.removeProperty("--winner-color");
+      this.resultOverlay.style.removeProperty("--winner-color");
       return;
     }
 
@@ -198,6 +215,8 @@ export class UIManager {
       onComplete: () => {
         this.resultOverlay.classList.add("hidden");
         this.resultContent.style.transform = "";
+        this.resultContent.style.removeProperty("--winner-color");
+        this.resultOverlay.style.removeProperty("--winner-color");
       },
     });
   }
@@ -214,6 +233,8 @@ export class UIManager {
     this.winnerThemeEl.style.color = "";
     this.winnerParticipantEl.textContent = "";
     this.resultContent.style.borderColor = "";
+    this.resultContent.style.removeProperty("--winner-color");
+    this.resultOverlay.style.removeProperty("--winner-color");
   }
 
   private getReadableTextColor(color: number): string {
@@ -221,7 +242,7 @@ export class UIManager {
     const green = (color >> 8) & 0xff;
     const blue = color & 0xff;
     const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
-    return luminance > 0.62 ? "#2d1a0e" : "#fffaf2";
+    return luminance > 0.62 ? "#005F60" : "#FFFFFF";
   }
 
   private escapeHtml(text: string): string {
