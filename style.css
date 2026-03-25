@@ -20,15 +20,22 @@ body {
 
 #ui-overlay {
   position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 18px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   z-index: 100;
+  pointer-events: none;
 }
 
 #title {
-  font-size: 3.5rem;
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  font-size: 3.1rem;
   color: #faab36;
   text-shadow:
     3px 3px 0 #a35600,
@@ -36,24 +43,24 @@ body {
     1px -1px 0 #7a3f00,
     -1px 1px 0 #7a3f00,
     0 0 20px rgba(250, 171, 54, 0.4);
-  margin-bottom: 16px;
   letter-spacing: 10px;
-  animation: titleFloat 2s ease-in-out infinite;
+  animation: titleFloatTop 2.2s ease-in-out infinite;
+  pointer-events: none;
 }
 
 #title-logo {
-  height: 80px;
+  height: 68px;
   width: auto;
   filter: drop-shadow(0 0 12px rgba(250, 171, 54, 0.5));
 }
 
-@keyframes titleFloat {
+@keyframes titleFloatTop {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateX(-50%) translateY(-6px);
   }
 }
 
@@ -61,7 +68,7 @@ button {
   font-family: "Comic Sans MS", "Chalkboard", cursive, sans-serif;
   font-size: 1.4rem;
   padding: 14px 36px;
-  margin: 8px;
+  margin: 6px;
   border: 3px solid rgba(0, 0, 0, 0.3);
   border-radius: 50px;
   cursor: pointer;
@@ -69,6 +76,7 @@ button {
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 2px;
+  pointer-events: auto;
 }
 
 #start-btn {
@@ -109,18 +117,20 @@ button {
 
 #participant-themes {
   position: fixed;
-  top: 16px;
-  left: 16px;
-  background: rgba(0, 47, 47, 0.75);
+  top: 18px;
+  left: 18px;
+  background: rgba(0, 47, 47, 0.72);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(250, 171, 54, 0.3);
   border-radius: 12px;
   padding: 10px 14px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   z-index: 90;
-  max-width: 260px;
+  max-width: 280px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  pointer-events: auto;
 }
 
 .theme-item {
@@ -150,7 +160,7 @@ button {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 30, 30, 0.88);
+  background: rgba(0, 30, 30, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,10 +182,11 @@ button {
   background: linear-gradient(135deg, #002f2f 0%, #004a4a 50%, #002f2f 100%);
   border: 4px solid #faab36;
   border-radius: 24px;
-  padding: 48px 56px;
+  padding: 44px 52px;
   text-align: center;
   pointer-events: auto;
   max-width: 560px;
+  width: min(560px, calc(100vw - 40px));
   box-shadow:
     0 0 60px rgba(250, 171, 54, 0.2),
     0 20px 60px rgba(0, 0, 0, 0.6);
@@ -190,6 +201,7 @@ button {
 
 #winner-theme {
   font-size: 2.8rem;
+  line-height: 1.05;
   color: #fff;
   margin-bottom: 16px;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
@@ -398,5 +410,27 @@ button {
   }
   .editor-actions button {
     width: 100%;
+  }
+
+  #participant-themes {
+    top: 12px;
+    left: 12px;
+    max-width: calc(100vw - 24px);
+  }
+
+  #result-content {
+    padding: 28px 24px;
+  }
+
+  #result-content h2 {
+    font-size: 1.2rem;
+  }
+
+  #winner-theme {
+    font-size: 2rem;
+  }
+
+  #winner-participant {
+    font-size: 1rem;
   }
 }

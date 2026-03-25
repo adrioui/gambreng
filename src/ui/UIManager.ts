@@ -135,8 +135,9 @@ export class UIManager {
           `<div class="theme-item p${i + 1}">P${i + 1}: ${this.escapeHtml(p.name)} — "${this.escapeHtml(p.theme)}"</div>`,
       )
       .join("");
+    this.participantThemesEl.style.opacity = "1";
     this.participantThemesEl.classList.remove("hidden");
-    gsap.from(this.participantThemesEl, { opacity: 0, x: 50, duration: 0.5 });
+    gsap.from(this.participantThemesEl, { opacity: 0, x: 40, duration: 0.45, ease: "power2.out" });
   }
 
   hideParticipantThemes(): void {
