@@ -3,11 +3,17 @@ import * as THREE from "three";
 import type { CaptureBall } from "@/objects/CaptureBall";
 import type { OrbitSystem } from "@/objects/OrbitSystem";
 
+type CameraFrame = {
+  position: THREE.Vector3;
+  lookAt: THREE.Vector3;
+};
+
 export function playCaptureAnimation(
   balls: CaptureBall[],
   orbitSystem: OrbitSystem,
   domeLight: THREE.PointLight,
   camera: THREE.PerspectiveCamera,
+  cameraFrame: CameraFrame,
   onComplete: (winnerIndex: number) => void,
 ): gsap.core.Timeline {
   const tl = gsap.timeline();
@@ -28,12 +34,12 @@ export function playCaptureAnimation(
   tl.to(
     camera.position,
     {
-      x: 0.25,
-      y: 3.85,
-      z: 7.55,
+      x: cameraFrame.position.x,
+      y: cameraFrame.position.y,
+      z: cameraFrame.position.z,
       duration: 1.55,
       ease: "power2.inOut",
-      onUpdate: () => camera.lookAt(0, 3.92, 0.05),
+      onUpdate: () => camera.lookAt(cameraFrame.lookAt),
     },
     0.05,
   );

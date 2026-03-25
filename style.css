@@ -604,24 +604,26 @@ input:focus-visible {
 
 @media (max-width: 640px) {
   #ui-overlay {
-    padding: 14px 12px 20px;
+    padding: 14px 12px 28px;
   }
 
   #title {
-    top: 12px;
-    gap: 6px;
+    top: 10px;
+    gap: 4px;
     width: calc(100vw - 16px);
   }
 
   #title-wordmark {
-    font-size: clamp(2.15rem, 12vw, 4rem);
-    letter-spacing: 3px;
+    font-size: clamp(1.95rem, 10.8vw, 3.7rem);
+    letter-spacing: 2px;
   }
 
   #title-kicker {
-    padding: 7px 12px;
-    font-size: 0.65rem;
-    letter-spacing: 0.8px;
+    max-width: calc(100vw - 28px);
+    padding: 6px 10px;
+    font-size: 0.58rem;
+    line-height: 1.15;
+    letter-spacing: 0.7px;
   }
 
   #participant-themes {
@@ -639,12 +641,25 @@ input:focus-visible {
     font-size: 0.9rem;
   }
 
+  #control-cluster {
+    gap: 8px;
+  }
+
   #control-chip {
+    max-width: min(100%, 340px);
+    padding: 7px 12px;
     font-size: 0.7rem;
+    text-align: center;
+  }
+
+  #edit-btn {
+    padding: 9px 20px;
+    font-size: 0.95rem;
   }
 
   #start-btn {
     width: min(100%, 100vw - 24px);
+    font-size: clamp(1rem, 7.6vw, 1.55rem);
   }
 
   #editor-form,

@@ -2,11 +2,17 @@ import gsap from "gsap";
 import * as THREE from "three";
 import type { OrbitSystem } from "@/objects/OrbitSystem";
 
+type CameraFrame = {
+  position: THREE.Vector3;
+  lookAt: THREE.Vector3;
+};
+
 export function playBuildUpAnimation(
   orbitSystem: OrbitSystem,
   domeLight: THREE.PointLight,
   camera: THREE.PerspectiveCamera,
   machine: THREE.Group,
+  cameraFrame: CameraFrame,
   onComplete: () => void,
 ): gsap.core.Timeline {
   const tl = gsap.timeline();
@@ -58,12 +64,12 @@ export function playBuildUpAnimation(
   tl.to(
     camera.position,
     {
-      x: 0.12,
-      y: 3.55,
-      z: 9.4,
+      x: cameraFrame.position.x,
+      y: cameraFrame.position.y,
+      z: cameraFrame.position.z,
       duration: 2.7,
       ease: "power2.inOut",
-      onUpdate: () => camera.lookAt(0, 3.95, 0),
+      onUpdate: () => camera.lookAt(cameraFrame.lookAt),
     },
     0,
   );

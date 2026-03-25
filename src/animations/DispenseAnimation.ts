@@ -7,6 +7,7 @@ export function playDispenseAnimation(
   nestTrayPosition: THREE.Vector3,
   camera: THREE.PerspectiveCamera,
   domeLight: THREE.PointLight,
+  cameraPosition: THREE.Vector3,
   onComplete: () => void,
 ): gsap.core.Timeline {
   const tl = gsap.timeline();
@@ -69,9 +70,9 @@ export function playDispenseAnimation(
   tl.to(
     camera.position,
     {
-      x: 0.1,
-      y: 2.22,
-      z: 8.75,
+      x: cameraPosition.x,
+      y: cameraPosition.y,
+      z: cameraPosition.z,
       duration: 1.12,
       ease: "power2.inOut",
       onUpdate: () => camera.lookAt(trayTarget.x, trayTarget.y + 0.08, trayTarget.z + 0.06),

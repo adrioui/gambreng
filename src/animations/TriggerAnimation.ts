@@ -1,9 +1,15 @@
 import gsap from "gsap";
 import * as THREE from "three";
 
+type CameraFrame = {
+  position: THREE.Vector3;
+  lookAt: THREE.Vector3;
+};
+
 export function playTriggerAnimation(
   handle: THREE.Group,
   camera: THREE.PerspectiveCamera,
+  cameraFrame: CameraFrame,
   onComplete: () => void,
 ): gsap.core.Timeline {
   const tl = gsap.timeline();
@@ -41,12 +47,12 @@ export function playTriggerAnimation(
   tl.to(
     camera.position,
     {
-      x: 0.08,
-      z: 10.95,
-      y: 3.15,
+      x: cameraFrame.position.x,
+      y: cameraFrame.position.y,
+      z: cameraFrame.position.z,
       duration: 1.15,
       ease: "power2.inOut",
-      onUpdate: () => camera.lookAt(0, 2.65, 0),
+      onUpdate: () => camera.lookAt(cameraFrame.lookAt),
     },
     0,
   );

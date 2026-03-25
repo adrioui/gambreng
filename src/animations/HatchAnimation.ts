@@ -2,10 +2,17 @@ import gsap from "gsap";
 import * as THREE from "three";
 import type { CaptureBall } from "@/objects/CaptureBall";
 
+type HatchCameraFrames = {
+  closePosition: THREE.Vector3;
+  settlePosition: THREE.Vector3;
+  settleLookAt: THREE.Vector3;
+};
+
 export function playHatchAnimation(
   ball: CaptureBall,
   camera: THREE.PerspectiveCamera,
   _scene: THREE.Scene,
+  cameraFrames: HatchCameraFrames,
   onSparkle: (position: THREE.Vector3) => void,
   onComplete: () => void,
 ): gsap.core.Timeline {
@@ -106,9 +113,9 @@ export function playHatchAnimation(
   tl.to(
     camera.position,
     {
-      x: 0,
-      y: 2.5,
-      z: 6.95,
+      x: cameraFrames.closePosition.x,
+      y: cameraFrames.closePosition.y,
+      z: cameraFrames.closePosition.z,
       duration: 1.55,
       ease: "power2.inOut",
       onUpdate: () => camera.lookAt(ball.group.position),
@@ -275,12 +282,12 @@ export function playHatchAnimation(
   tl.to(
     camera.position,
     {
-      x: 0,
-      y: 3.1,
-      z: 10.15,
+      x: cameraFrames.settlePosition.x,
+      y: cameraFrames.settlePosition.y,
+      z: cameraFrames.settlePosition.z,
       duration: 1.0,
       ease: "sine.out",
-      onUpdate: () => camera.lookAt(0, 2.65, 0),
+      onUpdate: () => camera.lookAt(cameraFrames.settleLookAt),
     },
     ">0.2",
   );

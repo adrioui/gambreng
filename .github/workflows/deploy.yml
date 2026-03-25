@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
   ci:
@@ -37,11 +38,20 @@ jobs:
       - name: Build app
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Deploy PR preview to Cloudflare Pages
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=gambreng
+          command: pages deploy dist --project-name=gambreng --branch=${{ github.head_ref }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy production to Cloudflare Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=gambreng --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
