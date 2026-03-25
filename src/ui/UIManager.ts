@@ -7,7 +7,7 @@ export class UIManager {
   private copyLinkResetTimeout: number | null = null;
   private editBtn: HTMLButtonElement;
   private startBtn: HTMLButtonElement;
-  private handleBtn: HTMLButtonElement;
+
   private resetBtn: HTMLButtonElement;
   private editorOverlay: HTMLElement;
   private editorForm: HTMLFormElement;
@@ -25,7 +25,7 @@ export class UIManager {
   constructor() {
     this.editBtn = document.getElementById("edit-btn") as HTMLButtonElement;
     this.startBtn = document.getElementById("start-btn") as HTMLButtonElement;
-    this.handleBtn = document.getElementById("handle-btn") as HTMLButtonElement;
+
     this.resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
     this.editorOverlay = document.getElementById("editor-overlay")!;
     this.editorForm = document.getElementById("editor-form") as HTMLFormElement;
@@ -43,13 +43,11 @@ export class UIManager {
 
   bindEvents(handlers: {
     start: () => void;
-    spin: () => void;
     reset: () => void;
     edit: () => void;
     saveParticipants: (participants: Participant[]) => void;
   }): void {
     this.startBtn.addEventListener("click", handlers.start);
-    this.handleBtn.addEventListener("click", handlers.spin);
     this.resetBtn.addEventListener("click", handlers.reset);
     this.editBtn.addEventListener("click", handlers.edit);
     this.cancelEditorBtn.addEventListener("click", () => this.closeEditor());
@@ -153,27 +151,18 @@ export class UIManager {
     });
   }
 
-  showHandleButton(): void {
-    this.handleBtn.classList.remove("hidden");
-    gsap.from(this.handleBtn, { scale: 0, duration: 0.5, ease: "back.out(2)" });
-  }
-
-  disableHandleButton(): void {
-    this.handleBtn.disabled = true;
-    this.handleBtn.classList.add("spinning");
-  }
-
   showResetButton(): void {
-    this.handleBtn.classList.add("hidden");
     this.resetBtn.classList.remove("hidden");
   }
 
   showResult(winner: Participant): void {
     const col = colorToHex(winner.color);
+    gsap.killTweensOf(this.resultContent);
     this.winnerThemeEl.textContent = `"${winner.theme}"`;
     this.winnerThemeEl.style.color = col;
     this.winnerParticipantEl.textContent = `Diusulkan oleh: ${winner.name}`;
     this.resultContent.style.borderColor = col;
+    this.resultContent.style.transform = "";
     this.resultOverlay.classList.remove("hidden");
     gsap.from(this.resultContent, {
       scale: 0,
@@ -183,7 +172,15 @@ export class UIManager {
     });
   }
 
-  hideResult(): void {
+  hideResult(immediate = false): void {
+    gsap.killTweensOf(this.resultContent);
+
+    if (immediate) {
+      this.resultOverlay.classList.add("hidden");
+      this.resultContent.style.transform = "";
+      return;
+    }
+
     gsap.to(this.resultContent, {
       scale: 0,
       duration: 0.3,
@@ -198,12 +195,15 @@ export class UIManager {
   resetAll(): void {
     this.resetBtn.classList.add("hidden");
     this.startBtn.classList.remove("hidden");
-    this.handleBtn.classList.add("hidden");
-    this.handleBtn.disabled = false;
-    this.handleBtn.classList.remove("spinning");
     this.titleEl.classList.remove("hidden");
     this.participantThemesEl.classList.add("hidden");
     this.participantThemesEl.style.opacity = "";
+    this.resultOverlay.classList.add("hidden");
+    this.resultContent.style.transform = "";
+    this.winnerThemeEl.textContent = "";
+    this.winnerThemeEl.style.color = "";
+    this.winnerParticipantEl.textContent = "";
+    this.resultContent.style.borderColor = "";
   }
 
   private escapeHtml(text: string): string {

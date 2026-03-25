@@ -89,30 +89,6 @@ button {
   box-shadow: 0 2px 0 #a35600;
 }
 
-#handle-btn {
-  background: linear-gradient(180deg, #faab36 0%, #f78104 100%);
-  color: #fff;
-  box-shadow:
-    0 5px 0 #b35d00,
-    0 8px 20px rgba(247, 129, 4, 0.3);
-}
-#handle-btn:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 7px 0 #b35d00,
-    0 10px 25px rgba(247, 129, 4, 0.4);
-}
-#handle-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 2px 0 #b35d00;
-}
-#handle-btn:disabled {
-  background: #6b7280;
-  box-shadow: 0 5px 0 #4b5563;
-  cursor: not-allowed;
-  transform: none;
-}
-
 #reset-btn {
   background: linear-gradient(180deg, #249ea0 0%, #008083 100%);
   color: #fff;
@@ -237,19 +213,6 @@ button {
 
 .hidden {
   display: none !important;
-}
-
-#handle-btn.spinning {
-  animation: pulse 0.3s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
 }
 
 /* Edit button */
