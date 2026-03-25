@@ -16,7 +16,7 @@ export class Environment {
     this.createGround(scene);
     this.createGroundRing(scene);
     this.setupLights(scene);
-    scene.fog = new THREE.FogExp2(STYLE_COLORS.fog, 0.02);
+    scene.fog = new THREE.FogExp2(STYLE_COLORS.fog, 0.016);
   }
 
   private createSky(scene: THREE.Scene): void {
@@ -37,9 +37,38 @@ export class Environment {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, skyCanvas.width, skyCanvas.height);
 
-    for (let i = 0; i < 2600; i++) {
-      const radius = 0.8 + Math.random() * 3;
-      ctx.fillStyle = toRgba(PALETTE.paper.dark, 0.01 + Math.random() * 0.03);
+    const burstCenterX = skyCanvas.width * 0.5;
+    const burstCenterY = skyCanvas.height * 0.62;
+    const rayCount = 26;
+    for (let i = 0; i < rayCount; i++) {
+      const startAngle = (i / rayCount) * Math.PI * 2;
+      const endAngle = startAngle + (Math.PI * 2) / rayCount / 2;
+      ctx.beginPath();
+      ctx.moveTo(burstCenterX, burstCenterY);
+      ctx.arc(burstCenterX, burstCenterY, skyCanvas.width * 0.85, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle =
+        i % 2 === 0 ? toRgba(PALETTE.paper.light, 0.2) : toRgba(PALETTE.paper.mid, 0.08);
+      ctx.fill();
+    }
+
+    const glow = ctx.createRadialGradient(
+      burstCenterX,
+      burstCenterY,
+      0,
+      burstCenterX,
+      burstCenterY,
+      skyCanvas.width * 0.42,
+    );
+    glow.addColorStop(0, toRgba(PALETTE.paper.light, 0.42));
+    glow.addColorStop(0.55, toRgba(PALETTE.paper.mid, 0.18));
+    glow.addColorStop(1, toRgba(PALETTE.paper.mid, 0));
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, skyCanvas.width, skyCanvas.height);
+
+    for (let i = 0; i < 2300; i++) {
+      const radius = 0.7 + Math.random() * 2.6;
+      ctx.fillStyle = toRgba(PALETTE.paper.dark, 0.008 + Math.random() * 0.026);
       ctx.beginPath();
       ctx.arc(
         Math.random() * skyCanvas.width,
@@ -51,16 +80,27 @@ export class Environment {
       ctx.fill();
     }
 
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 160; i++) {
       const x = Math.random() * skyCanvas.width;
       const y = Math.random() * skyCanvas.height;
-      const length = 20 + Math.random() * 60;
+      const length = 18 + Math.random() * 54;
       const angle = Math.random() * Math.PI;
-      ctx.strokeStyle = toRgba(PALETTE.ink.soft, 0.03 + Math.random() * 0.04);
-      ctx.lineWidth = 0.5 + Math.random() * 1.1;
+      ctx.strokeStyle = toRgba(PALETTE.ink.soft, 0.02 + Math.random() * 0.03);
+      ctx.lineWidth = 0.4 + Math.random() * 0.9;
       ctx.beginPath();
       ctx.moveTo(x, y);
       ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length * 0.5);
+      ctx.stroke();
+    }
+
+    for (let i = 0; i < 120; i++) {
+      const x = Math.random() * skyCanvas.width;
+      const y = skyCanvas.height * 0.1 + Math.random() * skyCanvas.height * 0.8;
+      const size = 3 + Math.random() * 10;
+      ctx.strokeStyle = toRgba(STYLE_COLORS.accent, 0.18 + Math.random() * 0.16);
+      ctx.lineWidth = 1.1 + Math.random() * 1.1;
+      ctx.beginPath();
+      ctx.rect(x, y, size, size);
       ctx.stroke();
     }
 
@@ -97,25 +137,37 @@ export class Environment {
   }
 
   private createGroundRing(scene: THREE.Scene): void {
-    const ringGeo = new THREE.RingGeometry(2.8, 3.2, 64);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: STYLE_COLORS.accentSoft,
+    const outerRingMat = new THREE.MeshBasicMaterial({
+      color: PALETTE.paper.mid,
+      transparent: true,
+      opacity: 0.16,
+      side: THREE.DoubleSide,
+    });
+    applyOutlineParameters(outerRingMat, { visible: false, keepAlive: false });
+
+    const outerRing = new THREE.Mesh(new THREE.RingGeometry(2.8, 3.24, 64), outerRingMat);
+    outerRing.rotation.x = -Math.PI / 2;
+    outerRing.position.y = 0.01;
+    scene.add(outerRing);
+
+    const accentRingMat = new THREE.MeshBasicMaterial({
+      color: STYLE_COLORS.accent,
       transparent: true,
       opacity: 0.18,
       side: THREE.DoubleSide,
     });
-    applyOutlineParameters(ringMat, { visible: false, keepAlive: false });
+    applyOutlineParameters(accentRingMat, { visible: false, keepAlive: false });
 
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2;
-    ring.position.y = 0.01;
-    scene.add(ring);
+    const accentRing = new THREE.Mesh(new THREE.RingGeometry(2.52, 2.68, 64), accentRingMat);
+    accentRing.rotation.x = -Math.PI / 2;
+    accentRing.position.y = 0.012;
+    scene.add(accentRing);
   }
 
   private setupLights(scene: THREE.Scene): void {
-    scene.add(new THREE.AmbientLight(PALETTE.paper.mid, 0.9));
+    scene.add(new THREE.AmbientLight(PALETTE.paper.mid, 0.88));
 
-    const key = new THREE.DirectionalLight(0xfff3dd, 1.15);
+    const key = new THREE.DirectionalLight(PALETTE.paper.light, 1.18);
     key.position.set(4.8, 8.2, 6.2);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
@@ -128,7 +180,7 @@ export class Environment {
     key.shadow.bias = -0.001;
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0xd4a57e, 0.5);
+    const fill = new THREE.DirectionalLight(PALETTE.earth.light, 0.52);
     fill.position.set(-5.5, 4.2, -3.2);
     scene.add(fill);
   }
