@@ -13,12 +13,15 @@ export function createDome(group: THREE.Group): DomeResult {
   const domeMat = new THREE.MeshPhysicalMaterial({
     color: MACHINE_COLORS.dome,
     transparent: true,
-    opacity: 0.18,
+    opacity: 0.22,
     metalness: 0,
-    roughness: 0.05,
+    roughness: 0.04,
     clearcoat: 1.0,
-    clearcoatRoughness: 0.05,
-    envMapIntensity: 0.5,
+    clearcoatRoughness: 0.04,
+    envMapIntensity: 0.7,
+    transmission: 0.08,
+    thickness: 0.2,
+    ior: 1.12,
   });
   const dome = new THREE.Mesh(domeGeo, domeMat);
   dome.position.y = 3.6;

@@ -7,8 +7,10 @@ export function createBody(group: THREE.Group): void {
   // Main body — rounded box
   const bodyMat = new THREE.MeshStandardMaterial({
     color: MACHINE_COLORS.body,
-    metalness: 0.1,
-    roughness: 0.75,
+    metalness: 0.12,
+    roughness: 0.66,
+    emissive: 0x8c5d14,
+    emissiveIntensity: 0.05,
   });
   const body = createRoundedBox(3.0, 2.8, 2.4, 0.2);
   body.material = bodyMat;
@@ -20,11 +22,13 @@ export function createBody(group: THREE.Group): void {
   // Front face panel — slightly inset rectangle on front
   const panelMat = new THREE.MeshStandardMaterial({
     color: MACHINE_COLORS.panel,
-    metalness: 0.2,
-    roughness: 0.6,
+    metalness: 0.24,
+    roughness: 0.5,
+    emissive: 0x0d3e40,
+    emissiveIntensity: 0.08,
   });
   const panel = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.6, 0.1), panelMat);
-  panel.position.set(0, 2, 1.25);
+  panel.position.set(0, 2, 1.3);
   group.add(panel);
 
   // Trim rings — horizontal box-shaped trim strips instead of torus

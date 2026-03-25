@@ -10,7 +10,7 @@ export function createLabel(group: THREE.Group): void {
     polygonOffsetUnits: -1,
   });
   const stickerMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.55), stickerMat);
-  stickerMesh.position.set(0, 2.9, 1.32);
+  stickerMesh.position.set(0, 2.9, 1.36);
   stickerMesh.renderOrder = 1;
   group.add(stickerMesh);
 

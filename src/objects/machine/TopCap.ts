@@ -9,8 +9,8 @@ export function createTopCap(group: THREE.Group): void {
     metalness: 0.15,
     roughness: 0.6,
   });
-  const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.9, 0.65, 32), capMat);
-  cap.position.y = 5.35;
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.82, 0.56, 32), capMat);
+  cap.position.y = 5.18;
   cap.castShadow = true;
   group.add(cap);
 
@@ -23,13 +23,13 @@ export function createTopCap(group: THREE.Group): void {
       roughness: 0.2,
     }),
   );
-  knob.position.y = 5.8;
+  knob.position.y = 5.6;
   group.add(knob);
 
   // Cap trim
   const trimMat = createTrimMaterial();
-  const capTrim = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.05, 8, 32), trimMat);
+  const capTrim = new THREE.Mesh(new THREE.TorusGeometry(0.64, 0.05, 8, 32), trimMat);
   capTrim.rotation.x = Math.PI / 2;
-  capTrim.position.y = 5.05;
+  capTrim.position.y = 4.9;
   group.add(capTrim);
 }
