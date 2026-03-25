@@ -56,6 +56,7 @@ jobs:
           DEPLOYMENT_URL: ${{ steps.deploy_preview.outputs.deployment-url }}
           DEPLOYMENT_ALIAS_URL: ${{ steps.deploy_preview.outputs.pages-deployment-alias-url }}
         with:
+          github-token: ${{ secrets.PR_COMMENT_GH_TOKEN }}
           script: |
             const marker = "<!-- cloudflare-pages-preview -->";
             const deploymentUrl = process.env.DEPLOYMENT_URL;
