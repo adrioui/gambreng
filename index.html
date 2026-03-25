@@ -11,24 +11,23 @@
 
     <div id="ui-overlay">
       <div id="title">
-        <img
-          src="/assets/gambreng-logo.png"
-          alt="GAMBRENG"
-          id="title-logo"
-          onerror="
-            this.style.display = 'none';
-            this.parentElement.textContent = 'GAMBRENG';
-          "
-        />
+        <div id="title-wordmark">GAMBRENG</div>
+        <p id="title-kicker">acak tema • pilih pemenang • gaya komik rame</p>
       </div>
+
       <div id="participant-themes" class="hidden"></div>
-      <button id="edit-btn">EDIT PESERTA</button>
-      <button id="start-btn">MULAI GAMBRENG</button>
-      <button id="reset-btn" class="hidden">ULANGI</button>
+
+      <div id="control-cluster">
+        <p id="control-chip">tekan tombol atau klik tuas mesin</p>
+        <button id="edit-btn">EDIT PESERTA</button>
+        <button id="start-btn">MULAI GAMBRENG</button>
+        <button id="reset-btn" class="hidden">ULANGI</button>
+      </div>
     </div>
 
     <div id="editor-overlay" class="hidden">
       <form id="editor-form">
+        <p class="editor-kicker">susun nama, tema, dan warna biar siap digambreng</p>
         <h2>Edit Peserta</h2>
         <div class="editor-rows"></div>
         <div class="editor-actions">
@@ -41,6 +40,7 @@
 
     <div id="result-overlay" class="hidden">
       <div id="result-content">
+        <p class="result-kicker">hasil gambreng hari ini</p>
         <h2>TEMA TERPILIH:</h2>
         <h1 id="winner-theme"></h1>
         <p id="winner-participant"></p>
