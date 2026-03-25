@@ -6,7 +6,7 @@ export function createTrimMaterial(): THREE.MeshToonMaterial {
   return createToonMaterial({
     color: MACHINE_COLORS.trim,
     emissive: PALETTE.ink.soft,
-    emissiveIntensity: 0.08,
-    outline: { thickness: 0.0042 },
+    emissiveIntensity: 0.12,
+    outline: { thickness: 0.0031, alpha: 0.82 },
   });
 }

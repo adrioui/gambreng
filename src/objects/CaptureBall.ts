@@ -53,37 +53,37 @@ export class CaptureBall {
     );
 
     const participantColor = new THREE.Color(participant.color);
-    const topColor = participantColor.clone().lerp(new THREE.Color(STYLE_COLORS.accentSoft), 0.18);
+    const topColor = participantColor.clone().lerp(new THREE.Color(PALETTE.earth.light), 0.18);
 
     this.topMaterial = createToonMaterial({
       color: topColor,
       emissive: topColor.clone().multiplyScalar(0.2),
       emissiveIntensity: 0.18,
-      outline: { thickness: 0.0036 },
+      outline: { thickness: 0.0026, alpha: 0.76 },
     });
     this.bottomMaterial = createToonMaterial({
       color: PALETTE.paper.light,
       emissive: participantColor.clone().multiplyScalar(0.08),
       emissiveIntensity: 0.05,
-      outline: { thickness: 0.0036 },
+      outline: { thickness: 0.0024, alpha: 0.72 },
     });
     this.seamMaterial = createToonMaterial({
       color: PALETTE.ink.soft,
       emissive: STYLE_COLORS.accentSoft,
       emissiveIntensity: 0,
-      outline: { thickness: 0.0028 },
+      outline: { thickness: 0.0018, alpha: 0.68 },
     });
     this.buttonRingMaterial = createToonMaterial({
       color: PALETTE.earth.mid,
       emissive: STYLE_COLORS.accentSoft,
       emissiveIntensity: 0.1,
-      outline: { thickness: 0.0028 },
+      outline: { thickness: 0.0018, alpha: 0.68 },
     });
     this.buttonCoreMaterial = createToonMaterial({
       color: PALETTE.cream,
       emissive: STYLE_COLORS.accentSoft,
       emissiveIntensity: 0.12,
-      outline: { thickness: 0.0026 },
+      outline: { thickness: 0.0017, alpha: 0.64 },
     });
     this.innerGlowMaterial = new THREE.MeshBasicMaterial({
       color: topColor,

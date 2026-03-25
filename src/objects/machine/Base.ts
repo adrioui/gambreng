@@ -8,8 +8,8 @@ export function createBase(group: THREE.Group): void {
   const footMat = createToonMaterial({
     color: MACHINE_COLORS.foot,
     emissive: PALETTE.ink.soft,
-    emissiveIntensity: 0.05,
-    outline: { thickness: 0.0042 },
+    emissiveIntensity: 0.12,
+    outline: { thickness: 0.003, alpha: 0.84 },
   });
   const footPositions: [number, number][] = [
     [-1.3, -1.0],
@@ -29,7 +29,7 @@ export function createBase(group: THREE.Group): void {
     color: MACHINE_COLORS.base,
     emissive: PALETTE.earth.dark,
     emissiveIntensity: 0.08,
-    outline: { thickness: 0.0044 },
+    outline: { thickness: 0.0032, alpha: 0.8 },
   });
   const base = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.5, 2.6), baseMat);
   base.position.y = 0.55;

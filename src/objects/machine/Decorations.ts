@@ -7,8 +7,8 @@ export function createDecorations(group: THREE.Group): void {
   const starMat = createToonMaterial({
     color: MACHINE_COLORS.star,
     emissive: STYLE_COLORS.accentSoft,
-    emissiveIntensity: 0.12,
-    outline: { thickness: 0.003 },
+    emissiveIntensity: 0.16,
+    outline: { thickness: 0.0022, alpha: 0.7 },
   });
   const starPositions: [number, number, number][] = [
     [-1.0, 1.5, 1.0],
@@ -27,8 +27,8 @@ export function createDecorations(group: THREE.Group): void {
   const sideMat = createToonMaterial({
     color: MACHINE_COLORS.sidePanel,
     emissive: PALETTE.ink.soft,
-    emissiveIntensity: 0.05,
-    outline: { thickness: 0.004 },
+    emissiveIntensity: 0.09,
+    outline: { thickness: 0.0028, alpha: 0.8 },
   });
   ([-1, 1] as const).forEach((side) => {
     const sidePanel = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2, 1.5), sideMat);

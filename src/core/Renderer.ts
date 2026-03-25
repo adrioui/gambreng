@@ -35,9 +35,9 @@ export class Renderer {
     this.instance.outputColorSpace = THREE.SRGBColorSpace;
 
     this.outlineEffect = new OutlineEffect(this.instance, {
-      defaultThickness: 0.004,
+      defaultThickness: 0.0025,
       defaultColor: new THREE.Color(STYLE_COLORS.outline).toArray(),
-      defaultAlpha: 1,
+      defaultAlpha: 0.82,
       defaultKeepAlive: true,
     });
     this.outlineEffect.setPixelRatio(sizes.pixelRatio);

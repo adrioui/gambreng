@@ -10,7 +10,7 @@ export function createBody(group: THREE.Group): void {
     color: MACHINE_COLORS.body,
     emissive: PALETTE.earth.dark,
     emissiveIntensity: 0.08,
-    outline: { thickness: 0.0046 },
+    outline: { thickness: 0.0033, alpha: 0.78 },
   });
   const body = createRoundedBox(3.0, 2.8, 2.4, 0.2);
   body.material = bodyMat;
@@ -23,8 +23,8 @@ export function createBody(group: THREE.Group): void {
   const panelMat = createToonMaterial({
     color: MACHINE_COLORS.panel,
     emissive: PALETTE.paper.dark,
-    emissiveIntensity: 0.04,
-    outline: { thickness: 0.0036 },
+    emissiveIntensity: 0.03,
+    outline: { thickness: 0.0026, alpha: 0.72 },
   });
   const panel = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.6, 0.1), panelMat);
   panel.position.set(0, 2, 1.3);

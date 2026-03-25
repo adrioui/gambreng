@@ -13,13 +13,14 @@ export function createDome(group: THREE.Group): DomeResult {
   const domeMat = createToonMaterial({
     color: MACHINE_COLORS.dome,
     transparent: true,
-    opacity: 0.28,
+    opacity: 0.2,
     side: THREE.DoubleSide,
     emissive: PALETTE.paper.light,
-    emissiveIntensity: 0.14,
+    emissiveIntensity: 0.1,
     outline: {
-      thickness: 0.0026,
-      alpha: 0.45,
+      thickness: 0.0017,
+      alpha: 0.28,
+      color: STYLE_COLORS.accentSoft,
     },
   });
   domeMat.depthWrite = false;

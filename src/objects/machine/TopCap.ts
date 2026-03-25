@@ -9,7 +9,7 @@ export function createTopCap(group: THREE.Group): void {
     color: MACHINE_COLORS.cap,
     emissive: PALETTE.earth.dark,
     emissiveIntensity: 0.07,
-    outline: { thickness: 0.0044 },
+    outline: { thickness: 0.0031, alpha: 0.78 },
   });
   const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.82, 0.56, 32), capMat);
   cap.position.y = 5.18;
@@ -23,7 +23,7 @@ export function createTopCap(group: THREE.Group): void {
       color: MACHINE_COLORS.handleBall,
       emissive: STYLE_COLORS.accentSoft,
       emissiveIntensity: 0.12,
-      outline: { thickness: 0.0038 },
+      outline: { thickness: 0.0026, alpha: 0.76 },
     }),
   );
   knob.position.y = 5.6;

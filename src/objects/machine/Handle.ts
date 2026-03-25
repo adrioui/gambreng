@@ -11,8 +11,8 @@ export function createHandle(group: THREE.Group): THREE.Group {
   const stemMat = createToonMaterial({
     color: MACHINE_COLORS.handleStem,
     emissive: PALETTE.ink.soft,
-    emissiveIntensity: 0.08,
-    outline: { thickness: 0.0036 },
+    emissiveIntensity: 0.12,
+    outline: { thickness: 0.0028, alpha: 0.82 },
   });
 
   const handleStem = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.5, 12), stemMat);
@@ -32,7 +32,7 @@ export function createHandle(group: THREE.Group): THREE.Group {
       color: MACHINE_COLORS.handleBall,
       emissive: STYLE_COLORS.accentSoft,
       emissiveIntensity: 0.14,
-      outline: { thickness: 0.0032 },
+      outline: { thickness: 0.0026, alpha: 0.78 },
     }),
   );
   handleBall.position.set(0, 0.78, 1.8);

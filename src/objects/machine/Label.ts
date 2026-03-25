@@ -51,7 +51,7 @@ export function createLabel(group: THREE.Group): void {
   ctx.fill();
   ctx.lineWidth = 12;
   ctx.lineJoin = "round";
-  ctx.strokeStyle = colorToHex(STYLE_COLORS.outline);
+  ctx.strokeStyle = colorToHex(PALETTE.ink.brown);
   ctx.stroke();
 
   for (let i = 0; i < 420; i++) {
@@ -71,7 +71,7 @@ export function createLabel(group: THREE.Group): void {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.lineJoin = "round";
-  ctx.strokeStyle = colorToHex(STYLE_COLORS.outline);
+  ctx.strokeStyle = colorToHex(PALETTE.ink.brown);
   ctx.lineWidth = 18;
   ctx.font = 'bold 116px "Comic Sans MS", "Trebuchet MS", cursive';
   ctx.strokeText("GAMBRENG", 384, 108);

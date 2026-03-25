@@ -21,7 +21,7 @@ export function createNestTray(group: THREE.Group): THREE.Mesh {
     color: MACHINE_COLORS.chute,
     emissive: PALETTE.paper.dark,
     emissiveIntensity: 0.05,
-    outline: { thickness: 0.0038 },
+    outline: { thickness: 0.0028, alpha: 0.76 },
   });
   const bowl = new THREE.Mesh(bowlGeo, bowlMat);
   bowl.position.set(0, 0.85, 1.7);
