@@ -16,19 +16,19 @@ export const PALETTE = {
 } as const;
 
 export const MACHINE_COLORS = {
-  foot: PALETTE.teal.veryDark,
-  base: PALETTE.orange.dark,
-  body: PALETTE.teal.mid,
-  panel: PALETTE.teal.dark,
-  trim: PALETTE.orange.gold,
+  foot: PALETTE.teal.dark,
+  base: PALETTE.orange.mid,
+  body: PALETTE.orange.gold,
+  panel: PALETTE.teal.mid,
+  trim: PALETTE.orange.dark,
   dome: 0xaaddff,
-  cap: PALETTE.orange.dark,
-  coinSlot: PALETTE.teal.veryDark,
-  chute: PALETTE.teal.veryDark,
+  cap: PALETTE.orange.gold,
+  coinSlot: PALETTE.teal.dark,
+  chute: PALETTE.teal.mid,
   handleStem: PALETTE.metal.dark,
-  handleBall: PALETTE.orange.gold,
-  star: PALETTE.orange.gold,
-  sidePanel: 0x006566,
+  handleBall: PALETTE.orange.dark,
+  star: PALETTE.teal.bright,
+  sidePanel: PALETTE.teal.dark,
 } as const;
 
 const PARTICIPANT_SLOT_COUNT = 4;

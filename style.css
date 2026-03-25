@@ -7,7 +7,7 @@
 body {
   font-family: "Comic Sans MS", "Chalkboard", cursive, sans-serif;
   overflow: hidden;
-  background: #003d3d;
+  background: #002a2a;
 }
 
 #canvas-container {
@@ -72,21 +72,21 @@ button {
 }
 
 #start-btn {
-  background: linear-gradient(180deg, #f78104 0%, #fd5901 100%);
+  background: linear-gradient(180deg, #faab36 0%, #f78104 100%);
   color: #fff;
   box-shadow:
-    0 5px 0 #b34000,
-    0 8px 20px rgba(253, 89, 1, 0.3);
+    0 5px 0 #a35600,
+    0 8px 20px rgba(250, 171, 54, 0.3);
 }
 #start-btn:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 7px 0 #b34000,
-    0 10px 25px rgba(253, 89, 1, 0.4);
+    0 7px 0 #a35600,
+    0 10px 25px rgba(250, 171, 54, 0.4);
 }
 #start-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 2px 0 #b34000;
+  box-shadow: 0 2px 0 #a35600;
 }
 
 #handle-btn {
@@ -199,23 +199,10 @@ button {
   padding: 48px 56px;
   text-align: center;
   pointer-events: auto;
-  animation: popIn 0.6s ease;
   max-width: 560px;
   box-shadow:
     0 0 60px rgba(250, 171, 54, 0.2),
     0 20px 60px rgba(0, 0, 0, 0.6);
-}
-
-@keyframes popIn {
-  0% {
-    transform: scale(0) rotate(-5deg);
-  }
-  70% {
-    transform: scale(1.05) rotate(1deg);
-  }
-  100% {
-    transform: scale(1) rotate(0);
-  }
 }
 
 #result-content h2 {
@@ -267,23 +254,23 @@ button {
 
 /* Edit button */
 #edit-btn {
-  background: linear-gradient(180deg, #008083 0%, #005f60 100%);
+  background: linear-gradient(180deg, #249ea0 0%, #008083 100%);
   color: #fff;
   box-shadow:
-    0 5px 0 #003d3d,
-    0 8px 20px rgba(0, 128, 131, 0.3);
+    0 5px 0 #005f60,
+    0 8px 20px rgba(36, 158, 160, 0.3);
   font-size: 0.9rem;
   padding: 8px 20px;
 }
 #edit-btn:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 7px 0 #003d3d,
-    0 10px 25px rgba(0, 128, 131, 0.4);
+    0 7px 0 #005f60,
+    0 10px 25px rgba(36, 158, 160, 0.4);
 }
 #edit-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 2px 0 #003d3d;
+  box-shadow: 0 2px 0 #005f60;
 }
 
 /* Participant Editor Overlay */
@@ -395,17 +382,17 @@ button {
 }
 
 #save-editor-btn {
-  background: linear-gradient(180deg, #f78104 0%, #fd5901 100%);
+  background: linear-gradient(180deg, #faab36 0%, #f78104 100%);
   color: #fff;
-  box-shadow: 0 4px 0 #b34000;
+  box-shadow: 0 4px 0 #a35600;
 }
 #save-editor-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 #b34000;
+  box-shadow: 0 6px 0 #a35600;
 }
 #save-editor-btn:active {
   transform: translateY(2px);
-  box-shadow: 0 2px 0 #b34000;
+  box-shadow: 0 2px 0 #a35600;
 }
 
 #cancel-editor-btn {

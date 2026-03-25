@@ -43,7 +43,7 @@ export class Environment {
   private createGroundRing(scene: THREE.Scene): void {
     const ringGeo = new THREE.RingGeometry(2.8, 3.2, 64);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: 0xf78104,
+      color: 0xfaab36,
       transparent: true,
       opacity: 0.12,
       side: THREE.DoubleSide,
