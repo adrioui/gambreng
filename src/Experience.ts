@@ -54,7 +54,7 @@ export class Experience implements LoopCallback {
     this.camera = new THREE.PerspectiveCamera(40, this.sizes.width / this.sizes.height, 0.1, 100);
     this.camera.position.set(0, 3.1, 12.15);
     this.camera.lookAt(DEFAULT_CAMERA_TARGET);
-    this.renderer = new Renderer(canvas, this.sizes);
+    this.renderer = new Renderer(canvas, this.sizes, this.scene, this.camera);
     this.loop = new Loop();
 
     this.sizes.on("resize", () => {
@@ -139,7 +139,7 @@ export class Experience implements LoopCallback {
       this.camera.lookAt(this.cameraTarget);
     }
 
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(elapsed);
   }
 
   private triggerGacha(): void {
