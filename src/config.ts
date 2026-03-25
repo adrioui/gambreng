@@ -1,72 +1,72 @@
 import type { Participant } from "@/types";
 
 export const PALETTE = {
-  paper: { light: 0xf7f0e4, mid: 0xeadbc2, dark: 0xd7c2a0 },
-  earth: { light: 0xd6a06f, mid: 0xb86d44, dark: 0x7a4630 },
-  maroon: { mid: 0x7b3c3d, dark: 0x4a2426 },
-  olive: { mid: 0x9b8650, dark: 0x6d5c38 },
-  ink: { brown: 0x2d1a0e, soft: 0x543727 },
-  cream: 0xfffbf4,
+  paper: { light: 0xffffff, mid: 0xfaab36, dark: 0xf78104 },
+  earth: { light: 0xfaab36, mid: 0xf78104, dark: 0xfd5901 },
+  maroon: { mid: 0xfd5901, dark: 0xf78104 },
+  olive: { mid: 0x249ea0, dark: 0x008083 },
+  ink: { brown: 0x005f60, soft: 0x008083 },
+  cream: 0xffffff,
   white: 0xffffff,
-  black: 0x120d09,
+  black: 0x005f60,
 } as const;
 
 export const STYLE_COLORS = {
   outline: PALETTE.ink.brown,
   paper: PALETTE.paper.light,
-  paperShadow: PALETTE.paper.dark,
-  skyTop: PALETTE.cream,
-  skyMid: PALETTE.paper.mid,
-  skyBottom: 0xcfa579,
-  fog: 0xf3e7d6,
-  ground: 0xb98a60,
-  groundShadow: 0x8b6040,
-  accent: 0xd7783e,
-  accentSoft: 0xe4ab69,
+  paperShadow: PALETTE.paper.mid,
+  skyTop: PALETTE.paper.light,
+  skyMid: PALETTE.paper.light,
+  skyBottom: PALETTE.paper.mid,
+  fog: PALETTE.paper.light,
+  ground: PALETTE.paper.mid,
+  groundShadow: PALETTE.earth.mid,
+  accent: PALETTE.olive.mid,
+  accentSoft: PALETTE.olive.dark,
 } as const;
 
 export const FX_COLORS = {
   sparkles: [
-    PALETTE.cream,
-    PALETTE.paper.mid,
-    STYLE_COLORS.accentSoft,
-    PALETTE.maroon.mid,
-    PALETTE.olive.mid,
+    PALETTE.earth.dark,
+    PALETTE.earth.mid,
+    PALETTE.earth.light,
+    PALETTE.paper.light,
+    STYLE_COLORS.accent,
   ],
   confetti: [
+    PALETTE.earth.dark,
+    PALETTE.earth.mid,
+    PALETTE.earth.light,
+    PALETTE.paper.mid,
+    PALETTE.maroon.mid,
     STYLE_COLORS.accent,
     STYLE_COLORS.accentSoft,
-    PALETTE.paper.mid,
-    PALETTE.paper.dark,
-    PALETTE.earth.mid,
-    PALETTE.maroon.mid,
-    PALETTE.olive.mid,
-    PALETTE.cream,
+    PALETTE.paper.light,
   ],
-  floatingStars: [STYLE_COLORS.accentSoft, PALETTE.paper.mid, PALETTE.olive.mid],
+  floatingStars: [PALETTE.paper.mid, PALETTE.earth.mid, STYLE_COLORS.accent],
 } as const;
 
 export const DEFAULT_PARTICIPANTS: Participant[] = [
-  { name: "Peserta 1", theme: "Cyberpunk City", color: 0xc8744b },
-  { name: "Peserta 2", theme: "Hutan Ajaib", color: 0xc49d54 },
-  { name: "Peserta 3", theme: "Underwater World", color: 0x8b8f5a },
-  { name: "Peserta 4", theme: "Steampunk", color: 0x8a4245 },
+  { name: "Peserta 1", theme: "Cyberpunk City", color: 0xfd5901 },
+  { name: "Peserta 2", theme: "Hutan Ajaib", color: 0xf78104 },
+  { name: "Peserta 3", theme: "Underwater World", color: 0xfaab36 },
+  { name: "Peserta 4", theme: "Steampunk", color: 0x249ea0 },
 ];
 
 export const MACHINE_COLORS = {
-  foot: PALETTE.earth.dark,
+  foot: PALETTE.ink.brown,
   base: PALETTE.earth.mid,
   body: PALETTE.earth.light,
-  panel: PALETTE.paper.mid,
-  trim: PALETTE.maroon.mid,
-  dome: 0xfbf4ea,
+  panel: PALETTE.paper.light,
+  trim: PALETTE.ink.brown,
+  dome: PALETTE.paper.light,
   cap: PALETTE.earth.light,
 
-  chute: PALETTE.paper.dark,
-  handleStem: PALETTE.ink.soft,
-  handleBall: STYLE_COLORS.accent,
-  star: PALETTE.olive.mid,
-  sidePanel: PALETTE.maroon.dark,
+  chute: PALETTE.earth.mid,
+  handleStem: PALETTE.ink.brown,
+  handleBall: PALETTE.earth.light,
+  star: STYLE_COLORS.accent,
+  sidePanel: PALETTE.ink.soft,
 } as const;
 
 const PARTICIPANT_SLOT_COUNT = 4;
